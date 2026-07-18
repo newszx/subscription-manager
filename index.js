@@ -4,6 +4,7 @@
 // 常量：毫秒转换为小时/天，便于全局复用
 const MS_PER_HOUR = 1000 * 60 * 60;
 const MS_PER_DAY = MS_PER_HOUR * 24;
+const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24;
 
 function getCurrentTimeInTimezone(timezone = 'UTC') {
   try {
@@ -420,6 +421,763 @@ const lunarBiz = {
   }
 };
 
+const appStyles = `
+:root {
+  --color-primary: #2563eb;
+  --color-primary-strong: #1d4ed8;
+  --color-accent: #059669;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+  --color-surface: #ffffff;
+  --color-surface-soft: #f8fafc;
+  --color-background: #f6f8fb;
+  --color-foreground: #0f172a;
+  --color-muted: #64748b;
+  --color-border: #e2e8f0;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 14px 30px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.16);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color: var(--color-foreground);
+  background: var(--color-background);
+}
+
+body {
+  font-family: Inter, "Fira Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  letter-spacing: 0;
+  color: var(--color-foreground);
+}
+
+body.bg-gray-100,
+body.app-shell {
+  background:
+    linear-gradient(180deg, #f8fbff 0%, #eef4ff 290px, #f6f8fb 291px, #f6f8fb 100%) !important;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+button,
+[role="button"],
+a {
+  touch-action: manipulation;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid rgba(37, 99, 235, 0.35) !important;
+  outline-offset: 2px;
+}
+
+input,
+select,
+textarea {
+  min-height: 44px;
+  border-radius: var(--radius-sm) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-foreground) !important;
+  background: #fff;
+  box-shadow: none !important;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  min-height: auto;
+  accent-color: var(--color-primary);
+}
+
+textarea {
+  min-height: 96px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12) !important;
+}
+
+.app-nav,
+nav.bg-white {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(16px);
+  box-shadow: none !important;
+}
+
+.app-nav .h-16 {
+  min-height: 72px;
+  height: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  gap: 14px;
+}
+
+.brand-mark {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.24);
+}
+
+.brand-title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brand-title strong {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--color-foreground);
+}
+
+.brand-title span {
+  margin-top: 3px;
+  font-size: 0.76rem;
+  color: var(--color-muted);
+}
+
+#systemTimeDisplay {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 1px solid #dbeafe;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8 !important;
+  font-size: 0.78rem !important;
+  white-space: nowrap;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--radius-sm);
+  color: #334155 !important;
+  border: 1px solid transparent !important;
+  padding: 0 12px !important;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.nav-link:hover {
+  color: var(--color-primary) !important;
+  background: #eff6ff;
+}
+
+.nav-link.is-active {
+  color: #1d4ed8 !important;
+  border-color: #bfdbfe !important;
+  background: #eff6ff;
+}
+
+.page-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 42px;
+}
+
+.dashboard-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 22px 24px;
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  border-radius: var(--radius-md);
+  color: #fff;
+  background:
+    linear-gradient(135deg, #0f172a 0%, #1d4ed8 58%, #047857 100%);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.dashboard-hero h1 {
+  margin: 0;
+  font-size: clamp(1.55rem, 2.4vw, 2.1rem);
+  line-height: 1.2;
+  font-weight: 750;
+}
+
+.dashboard-hero p {
+  margin: 8px 0 0;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.6;
+}
+
+.hero-eyebrow {
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.metric-card {
+  min-height: 116px;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.metric-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.metric-value {
+  margin-top: 12px;
+  color: var(--color-foreground);
+  font-size: 1.9rem;
+  line-height: 1;
+  font-weight: 780;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-note {
+  margin-top: 8px;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+
+.metric-bar {
+  height: 7px;
+  margin-top: 14px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.metric-bar span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  transition: width 220ms ease;
+}
+
+.content-panel,
+.settings-panel {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--shadow-md);
+}
+
+.content-panel {
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.section-header h2,
+.settings-panel h2 {
+  margin: 0;
+  color: var(--color-foreground);
+  font-size: 1.2rem;
+  font-weight: 750;
+}
+
+.section-header p,
+.settings-intro {
+  margin: 4px 0 0;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.toolbar-row {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) 190px auto;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+  background: #fbfdff;
+}
+
+.search-control {
+  position: relative;
+}
+
+.search-control input {
+  padding-left: 42px !important;
+}
+
+.search-control .fa-search {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.table-meta {
+  padding: 10px 20px;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-warning,
+.btn-danger,
+.btn-info {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm) !important;
+  background-image: none !important;
+  font-weight: 700;
+  box-shadow: none !important;
+}
+
+.btn-primary {
+  background: var(--color-primary) !important;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-strong) !important;
+}
+
+.btn-secondary {
+  background: #334155 !important;
+}
+
+.btn-success {
+  background: var(--color-accent) !important;
+}
+
+.btn-warning {
+  background: var(--color-warning) !important;
+}
+
+.btn-danger {
+  background: var(--color-danger) !important;
+}
+
+.btn-info {
+  background: #0284c7 !important;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-success:hover,
+.btn-warning:hover,
+.btn-danger:hover,
+.btn-info:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12) !important;
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled,
+.btn-success:disabled,
+.btn-warning:disabled,
+.btn-danger:disabled,
+.btn-info:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+  transform: none;
+}
+
+.table-container {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.responsive-table thead {
+  background: #f8fafc !important;
+}
+
+.responsive-table th {
+  color: #475569 !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0 !important;
+}
+
+.responsive-table td {
+  vertical-align: middle;
+}
+
+.responsive-table tbody tr {
+  transition: background-color 160ms ease;
+}
+
+.status-pill,
+.responsive-table td span.rounded-full {
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  white-space: nowrap;
+}
+
+.action-buttons-wrapper {
+  gap: 6px;
+}
+
+.action-buttons-wrapper button {
+  min-height: 32px;
+  padding-left: 9px !important;
+  padding-right: 9px !important;
+}
+
+.empty-state-cell {
+  padding: 34px 18px !important;
+}
+
+.modal-container {
+  background: rgba(15, 23, 42, 0.42) !important;
+  backdrop-filter: blur(10px);
+}
+
+#subscriptionModal > div {
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+#subscriptionModal form {
+  background: #fff;
+}
+
+.custom-date-picker {
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.custom-date-picker .calendar-day {
+  border-radius: var(--radius-sm) !important;
+}
+
+.custom-date-picker .calendar-day:hover {
+  transform: none !important;
+}
+
+.config-section {
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-md) !important;
+  background: #fff !important;
+}
+
+.config-section.active {
+  border-color: #93c5fd !important;
+  background: #f8fbff !important;
+  box-shadow: inset 3px 0 0 var(--color-primary);
+}
+
+.config-section.inactive {
+  opacity: 0.64;
+}
+
+.settings-panel {
+  padding: 24px;
+}
+
+.settings-panel form > div {
+  border-color: var(--color-border) !important;
+}
+
+.toast {
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.login-container {
+  min-height: 100dvh;
+  padding: 24px;
+  background:
+    linear-gradient(135deg, #0f172a 0%, #1d4ed8 54%, #047857 100%) !important;
+}
+
+.login-shell {
+  width: min(980px, 100%);
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 28px;
+  align-items: stretch;
+}
+
+.login-panel {
+  display: flex;
+  min-height: 520px;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-md);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.login-panel h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.08;
+  font-weight: 780;
+}
+
+.login-panel p {
+  max-width: 520px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.7;
+}
+
+.login-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.login-kpi {
+  min-height: 82px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.login-kpi strong {
+  display: block;
+  font-size: 1.25rem;
+}
+
+.login-kpi span {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.78rem;
+}
+
+.login-box {
+  align-self: center;
+  border: 1px solid rgba(226, 232, 240, 0.92);
+  border-radius: var(--radius-md) !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.login-logo {
+  display: inline-flex;
+  width: 46px;
+  height: 46px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  box-shadow: 0 16px 26px rgba(37, 99, 235, 0.24);
+}
+
+.login-title {
+  margin-top: 18px;
+  color: var(--color-foreground);
+  font-size: 1.45rem;
+  font-weight: 760;
+}
+
+.login-subtitle {
+  color: var(--color-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .toolbar-row {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar-actions {
+    justify-content: flex-start;
+  }
+
+  .login-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .login-panel {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .app-nav .h-16 {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+
+  .nav-actions {
+    width: 100%;
+  }
+
+  .nav-link {
+    flex: 1;
+    justify-content: center;
+    padding: 0 8px !important;
+  }
+
+  #systemTimeDisplay {
+    display: none !important;
+  }
+
+  .page-shell {
+    width: min(100% - 24px, 1180px);
+    padding-top: 18px;
+  }
+
+  .dashboard-hero {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .hero-badge {
+    justify-self: flex-start;
+  }
+
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-header,
+  .toolbar-row {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .responsive-table tr {
+    border-color: var(--color-border) !important;
+    box-shadow: none !important;
+  }
+
+  .responsive-table td {
+    justify-content: space-between !important;
+    gap: 16px;
+  }
+
+  .responsive-table td:before {
+    min-width: 76px;
+  }
+
+  .action-buttons-wrapper {
+    justify-content: flex-start !important;
+  }
+
+  .login-container {
+    padding: 14px;
+  }
+
+  .login-panel {
+    padding: 22px;
+  }
+
+  .login-kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .login-box {
+    padding: 24px !important;
+  }
+
+  .settings-panel {
+    padding: 18px;
+  }
+}
+`;
+
 // 定义HTML模板
 const loginPage = `
 <!DOCTYPE html>
@@ -457,39 +1215,67 @@ const loginPage = `
       box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
     }
   </style>
+  <link href="/assets/app.css" rel="stylesheet">
 </head>
 <body class="login-container flex items-center justify-center">
-  <div class="login-box p-8 rounded-xl w-full max-w-md">
-    <div class="text-center mb-8">
-      <h1 class="text-2xl font-bold text-gray-800"><i class="fas fa-calendar-check mr-2"></i>订阅管理系统</h1>
-      <p class="text-gray-600 mt-2">登录管理您的订阅提醒</p>
-    </div>
-    
-    <form id="loginForm" class="space-y-6">
+  <main class="login-shell">
+    <section class="login-panel" aria-label="SubsTracker 概览">
       <div>
-        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">
-          <i class="fas fa-user mr-2"></i>用户名
-        </label>
-        <input type="text" id="username" name="username" required
-          class="input-field w-full px-4 py-3 rounded-lg text-gray-700 focus:outline-none">
+        <div class="hero-eyebrow">SUBSTRACKER WORKERS EDITION</div>
+        <h1>订阅、续期和提醒的统一控制台</h1>
+        <p>轻量部署在 Cloudflare Workers，集中管理周期、农历日期、提醒窗口和多渠道推送。</p>
+      </div>
+      <div class="login-kpis" aria-label="核心能力">
+        <div class="login-kpi">
+          <strong>KV</strong>
+          <span>低成本存储</span>
+        </div>
+        <div class="login-kpi">
+          <strong>UTC</strong>
+          <span>Cron 定时</span>
+        </div>
+        <div class="login-kpi">
+          <strong>6+</strong>
+          <span>通知渠道</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="login-box p-8 w-full" aria-label="登录表单">
+      <div class="mb-8">
+        <div class="login-logo">
+          <i class="fas fa-calendar-check" aria-hidden="true"></i>
+        </div>
+        <h2 class="login-title">登录 SubsTracker</h2>
+        <p class="login-subtitle mt-2">使用管理员账户进入控制台</p>
       </div>
       
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-          <i class="fas fa-lock mr-2"></i>密码
-        </label>
-        <input type="password" id="password" name="password" required
-          class="input-field w-full px-4 py-3 rounded-lg text-gray-700 focus:outline-none">
-      </div>
-      
-      <button type="submit" 
-        class="btn-primary w-full py-3 rounded-lg text-white font-medium focus:outline-none">
-        <i class="fas fa-sign-in-alt mr-2"></i>登录
-      </button>
-      
-      <div id="errorMsg" class="text-red-500 text-center"></div>
-    </form>
-  </div>
+      <form id="loginForm" class="space-y-5">
+        <div>
+          <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">
+            用户名
+          </label>
+          <input type="text" id="username" name="username" required autocomplete="username"
+            class="input-field w-full px-4 py-3 text-gray-700 focus:outline-none">
+        </div>
+        
+        <div>
+          <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
+            密码
+          </label>
+          <input type="password" id="password" name="password" required autocomplete="current-password"
+            class="input-field w-full px-4 py-3 text-gray-700 focus:outline-none">
+        </div>
+        
+        <button type="submit" 
+          class="btn-primary w-full py-3 text-white font-medium focus:outline-none">
+          <i class="fas fa-sign-in-alt mr-2" aria-hidden="true"></i>登录
+        </button>
+        
+        <div id="errorMsg" class="text-red-600 text-center text-sm min-h-[20px]" role="alert" aria-live="polite"></div>
+      </form>
+    </section>
+  </main>
   
   <script>
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -842,104 +1628,147 @@ const adminPage = `
     .toast.info { background-color: #3b82f6; }
     .toast.warning { background-color: #f59e0b; }
   </style>
+  <link href="/assets/app.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="app-shell min-h-screen">
   <div id="toast-container"></div>
 
-  <nav class="bg-white shadow-md">
+  <nav class="app-nav">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <i class="fas fa-calendar-check text-indigo-600 text-2xl mr-2"></i>
-          <span class="font-bold text-xl text-gray-800">订阅管理系统</span>
+        <div class="flex items-center gap-3">
+          <span class="brand-mark">
+            <i class="fas fa-calendar-check" aria-hidden="true"></i>
+          </span>
+          <span class="brand-title">
+            <strong>SubsTracker</strong>
+            <span>订阅管理与提醒系统</span>
+          </span>
           <span id="systemTimeDisplay" class="ml-4 text-base text-indigo-600 font-normal"></span>
         </div>
-        <div class="flex items-center space-x-4">
-          <a href="/admin" class="text-indigo-600 border-b-2 border-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
-            <i class="fas fa-list mr-1"></i>订阅列表
+        <div class="nav-actions">
+          <a href="/admin" class="nav-link is-active">
+            <i class="fas fa-table-list" aria-hidden="true"></i>订阅列表
           </a>
-          <a href="/admin/config" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-            <i class="fas fa-cog mr-1"></i>系统配置
+          <a href="/admin/config" class="nav-link">
+            <i class="fas fa-sliders" aria-hidden="true"></i>系统配置
           </a>
-          <a href="/api/logout" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-            <i class="fas fa-sign-out-alt mr-1"></i>退出登录
+          <a href="/api/logout" class="nav-link">
+            <i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i>退出登录
           </a>
         </div>
       </div>
     </div>
   </nav>
   
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+  <main class="page-shell">
+    <section class="dashboard-hero">
       <div>
-        <h2 class="text-2xl font-bold text-gray-800">订阅列表</h2>
-        <p class="text-sm text-gray-500 mt-1">使用搜索与分类快速定位订阅，开启农历显示可同步查看农历日期</p>
+        <div class="hero-eyebrow">SUBSCRIPTION OPERATIONS</div>
+        <h1>订阅运营看板</h1>
+        <p>按到期时间、提醒窗口和启用状态管理所有订阅。</p>
       </div>
-      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 w-full">
-        <div class="flex flex-col sm:flex-row sm:items-center gap-3 w-full lg:flex-1 lg:max-w-2xl">
-          <div class="relative flex-1 min-w-[200px] lg:max-w-md">
-            <input type="text" id="searchKeyword" placeholder="搜索名称、类型或备注..." class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-              <i class="fas fa-search"></i>
-            </span>
-          </div>
-          <div class="sm:w-44 lg:w-40">
-            <select id="categoryFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-white">
-              <option value="">全部分类</option>
-            </select>
-          </div>
+      <div class="hero-badge">
+        <i class="fas fa-bolt" aria-hidden="true"></i>
+        <span id="dashboardHealthText">等待数据同步</span>
+      </div>
+    </section>
+
+    <section class="metric-grid" aria-label="订阅概览">
+      <article class="metric-card">
+        <div class="metric-label"><i class="fas fa-layer-group" aria-hidden="true"></i>全部订阅</div>
+        <div id="metricTotal" class="metric-value">0</div>
+        <div class="metric-note">已记录项目</div>
+      </article>
+      <article class="metric-card">
+        <div class="metric-label"><i class="fas fa-circle-check" aria-hidden="true"></i>启用中</div>
+        <div id="metricActive" class="metric-value">0</div>
+        <div class="metric-note">参与提醒计算</div>
+        <div class="metric-bar"><span id="metricActiveBar"></span></div>
+      </article>
+      <article class="metric-card">
+        <div class="metric-label"><i class="fas fa-bell" aria-hidden="true"></i>即将到期</div>
+        <div id="metricSoon" class="metric-value">0</div>
+        <div class="metric-note">在提醒窗口内</div>
+      </article>
+      <article class="metric-card">
+        <div class="metric-label"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i>已过期</div>
+        <div id="metricExpired" class="metric-value">0</div>
+        <div class="metric-note">需要处理</div>
+      </article>
+    </section>
+
+    <section class="content-panel">
+      <div class="section-header">
+        <div>
+          <h2>订阅列表</h2>
+          <p>默认按最近到期排序。</p>
         </div>
-        <div class="flex items-center space-x-3 lg:space-x-4">
-        <label class="lunar-toggle">
-          <input type="checkbox" id="listShowLunar" class="form-checkbox h-4 w-4 text-indigo-600 shrink-0">
-          <span class="text-gray-700">显示农历</span>
-        </label>
-        <button id="addSubscriptionBtn" class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium flex items-center shrink-0">
-          <i class="fas fa-plus mr-2"></i>添加新订阅
+        <button id="addSubscriptionBtn" class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium">
+          <i class="fas fa-plus mr-2" aria-hidden="true"></i>添加订阅
         </button>
       </div>
+
+      <div class="toolbar-row">
+        <div class="search-control">
+          <input type="search" id="searchKeyword" placeholder="搜索名称、类型、分类或备注" autocomplete="off" class="w-full pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+          <i class="fas fa-search" aria-hidden="true"></i>
+        </div>
+        <select id="categoryFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+          <option value="">全部分类</option>
+        </select>
+        <div class="toolbar-actions">
+          <label class="lunar-toggle">
+            <input type="checkbox" id="listShowLunar" class="form-checkbox h-4 w-4 text-indigo-600">
+            <span class="text-gray-700">显示农历</span>
+          </label>
+        </div>
       </div>
-    </div>
-    
-    <div class="table-container bg-white rounded-lg overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="w-full divide-y divide-gray-200 responsive-table">
-          <thead class="bg-gray-50">
-            <tr>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 25%;">
-                名称
-              </th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 15%;">
-                类型
-              </th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 20%;">
-                到期时间 <i class="fas fa-sort-up ml-1 text-indigo-500" title="按到期时间升序排列"></i>
-              </th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 15%;">
-                提醒设置
-              </th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 10%;">
-                状态
-              </th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 15%;">
-                操作
-              </th>
-            </tr>
-          </thead>
-        <tbody id="subscriptionsBody" class="bg-white divide-y divide-gray-200">
-        </tbody>
-        </table>
+
+      <div class="table-meta">
+        <span id="tableResultCount">等待加载订阅数据</span>
       </div>
-    </div>
-  </div>
+      
+      <div class="table-container overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full divide-y divide-gray-200 responsive-table">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 25%;">
+                  名称
+                </th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 15%;">
+                  类型
+                </th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 20%;">
+                  到期时间 <i class="fas fa-sort-up ml-1 text-indigo-500" title="按到期时间升序排列"></i>
+                </th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 15%;">
+                  提醒设置
+                </th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 10%;">
+                  状态
+                </th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 15%;">
+                  操作
+                </th>
+              </tr>
+            </thead>
+            <tbody id="subscriptionsBody" class="bg-white divide-y divide-gray-200">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <!-- 添加/编辑订阅的模态框 -->
-  <div id="subscriptionModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 modal-container hidden flex items-center justify-center z-50">
+  <div id="subscriptionModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 modal-container hidden flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
       <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 rounded-t-lg">
         <div class="flex items-center justify-between">
           <h3 id="modalTitle" class="text-lg font-medium text-gray-900">添加新订阅</h3>
-          <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+          <button id="closeModal" type="button" aria-label="关闭弹窗" class="text-gray-400 hover:text-gray-600">
             <i class="fas fa-times text-xl"></i>
           </button>
         </div>
@@ -1570,6 +2399,20 @@ const lunarBiz = {
       renderSubscriptionTable();
     }
 
+    function escapeHtml(value = '') {
+      return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+
+    function escapeAttribute(value = '') {
+      return escapeHtml(value);
+    }
+
     function showToast(message, type = 'success', duration = 3000) {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
@@ -1579,7 +2422,16 @@ const lunarBiz = {
                    type === 'error' ? 'exclamation-circle' :
                    type === 'warning' ? 'exclamation-triangle' : 'info-circle';
       
-      toast.innerHTML = '<div class="flex items-center"><i class="fas fa-' + icon + ' mr-2"></i><span>' + message + '</span></div>';
+      const content = document.createElement('div');
+      content.className = 'flex items-center';
+      const iconEl = document.createElement('i');
+      iconEl.className = 'fas fa-' + icon + ' mr-2';
+      iconEl.setAttribute('aria-hidden', 'true');
+      const messageEl = document.createElement('span');
+      messageEl.textContent = message;
+      content.appendChild(iconEl);
+      content.appendChild(messageEl);
+      toast.appendChild(content);
       
       container.appendChild(toast);
       setTimeout(() => toast.classList.add('show'), 100);
@@ -1650,13 +2502,15 @@ const lunarBiz = {
 
     // 创建带悬浮提示的文本元素
     function createHoverText(text, maxLength = 30, className = 'text-sm text-gray-900') {
-      if (!text || text.length <= maxLength) {
-        return '<div class="' + className + '">' + text + '</div>';
+      const rawText = String(text || '');
+      const safeText = escapeHtml(rawText);
+      if (!rawText || rawText.length <= maxLength) {
+        return '<div class="' + className + '">' + safeText + '</div>';
       }
 
-      const truncated = text.substring(0, maxLength) + '...';
+      const truncated = escapeHtml(rawText.substring(0, maxLength) + '...');
       return '<div class="hover-container">' +
-        '<div class="hover-text ' + className + '" data-full-text="' + text.replace(/"/g, '&quot;') + '">' +
+        '<div class="hover-text ' + className + '" data-full-text="' + escapeAttribute(rawText) + '">' +
           truncated +
         '</div>' +
         '<div class="hover-tooltip"></div>' +
@@ -1733,6 +2587,100 @@ const lunarBiz = {
         value,
         displayText: unit === 'hour' ? '提前' + value + '小时' : '提前' + value + '天'
       };
+    }
+
+    function getTimezoneDayStamp(date, timezone) {
+      try {
+        const formatter = new Intl.DateTimeFormat('en-US', {
+          timeZone: timezone,
+          hour12: false,
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        });
+        const parts = formatter.formatToParts(date);
+        const pick = type => Number(parts.find(item => item.type === type).value);
+        return Date.UTC(pick('year'), pick('month') - 1, pick('day'), 0, 0, 0);
+      } catch (error) {
+        return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
+      }
+    }
+
+    function getSubscriptionTiming(subscription, now = new Date()) {
+      const expiryDate = new Date(subscription.expiryDate);
+      if (isNaN(expiryDate.getTime())) {
+        return { daysDiff: 0, diffHours: 0, isExpired: false, isSoon: false };
+      }
+
+      const currentDay = getTimezoneDayStamp(now, globalTimezone);
+      const expiryDay = getTimezoneDayStamp(expiryDate, globalTimezone);
+      const daysDiff = Math.round((expiryDay - currentDay) / (1000 * 60 * 60 * 24));
+      const diffHours = (expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+      const reminder = getReminderSettings(subscription);
+      const isExpired = daysDiff < 0;
+      const isSoon = subscription.isActive !== false && !isExpired && (
+        reminder.unit === 'hour'
+          ? diffHours >= 0 && diffHours <= reminder.value
+          : daysDiff >= 0 && daysDiff <= reminder.value
+      );
+
+      return { daysDiff, diffHours, isExpired, isSoon };
+    }
+
+    function setText(id, value) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.textContent = value;
+      }
+    }
+
+    function updateDashboardMetrics() {
+      const list = Array.isArray(subscriptionsCache) ? subscriptionsCache : [];
+      const now = new Date();
+      const total = list.length;
+      const active = list.filter(subscription => subscription.isActive !== false).length;
+      let soon = 0;
+      let expired = 0;
+
+      list.forEach(subscription => {
+        const timing = getSubscriptionTiming(subscription, now);
+        if (subscription.isActive !== false && timing.isExpired) {
+          expired += 1;
+        } else if (timing.isSoon) {
+          soon += 1;
+        }
+      });
+
+      setText('metricTotal', total);
+      setText('metricActive', active);
+      setText('metricSoon', soon);
+      setText('metricExpired', expired);
+
+      const activeBar = document.getElementById('metricActiveBar');
+      if (activeBar) {
+        activeBar.style.width = total ? Math.round((active / total) * 100) + '%' : '0%';
+      }
+
+      const healthText = document.getElementById('dashboardHealthText');
+      if (healthText) {
+        if (expired > 0) {
+          healthText.textContent = expired + ' 项过期待处理';
+        } else if (soon > 0) {
+          healthText.textContent = soon + ' 项即将到期';
+        } else if (total > 0) {
+          healthText.textContent = '运行状态正常';
+        } else {
+          healthText.textContent = '暂无订阅数据';
+        }
+      }
+    }
+
+    function updateTableResultCount(filteredCount, totalCount) {
+      const element = document.getElementById('tableResultCount');
+      if (!element) {
+        return;
+      }
+      element.textContent = '显示 ' + filteredCount + ' / ' + totalCount + ' 项订阅';
     }
 
     function attachHoverListeners() {
@@ -1843,8 +2791,11 @@ const lunarBiz = {
         });
       }
 
+      updateDashboardMetrics();
+      updateTableResultCount(filtered.length, Array.isArray(subscriptionsCache) ? subscriptionsCache.length : 0);
+
       if (filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-gray-500">没有符合条件的订阅</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state-cell text-center text-gray-500"><i class="fas fa-magnifying-glass mr-2"></i>没有符合条件的订阅</td></tr>';
         return;
       }
 
@@ -1890,7 +2841,7 @@ const lunarBiz = {
           : daysDiff >= 0 && daysDiff <= reminder.value;
 
         let statusHtml = '';
-        if (!subscription.isActive) {
+        if (subscription.isActive === false) {
           statusHtml = '<span class="px-2 py-1 text-xs font-medium rounded-full text-white bg-gray-500"><i class="fas fa-pause-circle mr-1"></i>已停用</span>';
         } else if (daysDiff < 0) {
           statusHtml = '<span class="px-2 py-1 text-xs font-medium rounded-full text-white bg-red-500"><i class="fas fa-exclamation-circle mr-1"></i>已过期</span>';
@@ -1926,17 +2877,17 @@ const lunarBiz = {
 
         let notesHtml = '';
         if (subscription.notes) {
-          const notes = subscription.notes;
+          const notes = String(subscription.notes);
           if (notes.length > 50) {
-            const truncatedNotes = notes.substring(0, 50) + '...';
+            const truncatedNotes = escapeHtml(notes.substring(0, 50) + '...');
             notesHtml = '<div class="notes-container">' +
-              '<div class="notes-text text-xs text-gray-500" data-full-notes="' + notes.replace(/"/g, '&quot;') + '">' +
+              '<div class="notes-text text-xs text-gray-500" data-full-notes="' + escapeAttribute(notes) + '">' +
                 truncatedNotes +
               '</div>' +
               '<div class="notes-tooltip"></div>' +
             '</div>';
           } else {
-            notesHtml = '<div class="text-xs text-gray-500">' + notes + '</div>';
+            notesHtml = '<div class="text-xs text-gray-500">' + escapeHtml(notes) + '</div>';
           }
         }
 
@@ -1947,7 +2898,7 @@ const lunarBiz = {
         const categoryTokens = normalizeCategoryTokens(subscription.category);
         const categoryHtml = categoryTokens.length
           ? '<div class="flex flex-wrap gap-2 mt-2">' + categoryTokens.map(cat =>
-              '<span class="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-xs rounded-full"><i class="fas fa-tag mr-1"></i>' + cat + '</span>'
+              '<span class="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-xs rounded-full"><i class="fas fa-tag mr-1"></i>' + escapeHtml(cat) + '</span>'
             ).join('') + '</div>'
           : '';
 
@@ -1988,6 +2939,7 @@ const lunarBiz = {
           ? '<div class="text-xs text-gray-500 mt-1">仅到期时提醒</div>'
           : (reminder.unit === 'hour' ? '<div class="text-xs text-gray-500 mt-1">小时级提醒</div>' : '');
         const reminderHtml = '<div><i class="fas fa-bell mr-1"></i>' + reminder.displayText + '</div>' + reminderExtra;
+        const safeId = escapeAttribute(subscription.id);
 
         row.innerHTML =
           '<td data-label="名称" class="px-4 py-3"><div class="td-content-wrapper">' +
@@ -2015,12 +2967,12 @@ const lunarBiz = {
           '<td data-label="状态" class="px-4 py-3"><div class="td-content-wrapper">' + statusHtml + '</div></td>' +
           '<td data-label="操作" class="px-4 py-3">' +
             '<div class="action-buttons-wrapper">' +
-              '<button class="edit btn-primary text-white px-2 py-1 rounded text-xs whitespace-nowrap" data-id="' + subscription.id + '"><i class="fas fa-edit mr-1"></i>编辑</button>' +
-              '<button class="test-notify btn-info text-white px-2 py-1 rounded text-xs whitespace-nowrap" data-id="' + subscription.id + '"><i class="fas fa-paper-plane mr-1"></i>测试</button>' +
-              '<button class="delete btn-danger text-white px-2 py-1 rounded text-xs whitespace-nowrap" data-id="' + subscription.id + '"><i class="fas fa-trash-alt mr-1"></i>删除</button>' +
-              (subscription.isActive
-                ? '<button class="toggle-status btn-warning text-white px-2 py-1 rounded text-xs whitespace-nowrap" data-id="' + subscription.id + '" data-action="deactivate"><i class="fas fa-pause-circle mr-1"></i>停用</button>'
-                : '<button class="toggle-status btn-success text-white px-2 py-1 rounded text-xs whitespace-nowrap" data-id="' + subscription.id + '" data-action="activate"><i class="fas fa-play-circle mr-1"></i>启用</button>') +
+              '<button class="edit btn-primary text-white px-2 py-1 rounded text-xs whitespace-nowrap" data-id="' + safeId + '"><i class="fas fa-edit mr-1"></i>编辑</button>' +
+              '<button class="test-notify btn-info text-white px-2 py-1 rounded text-xs whitespace-nowrap" data-id="' + safeId + '"><i class="fas fa-paper-plane mr-1"></i>测试</button>' +
+              '<button class="delete btn-danger text-white px-2 py-1 rounded text-xs whitespace-nowrap" data-id="' + safeId + '"><i class="fas fa-trash-alt mr-1"></i>删除</button>' +
+              (subscription.isActive !== false
+                ? '<button class="toggle-status btn-warning text-white px-2 py-1 rounded text-xs whitespace-nowrap" data-id="' + safeId + '" data-action="deactivate"><i class="fas fa-pause-circle mr-1"></i>停用</button>'
+                : '<button class="toggle-status btn-success text-white px-2 py-1 rounded text-xs whitespace-nowrap" data-id="' + safeId + '" data-action="activate"><i class="fas fa-play-circle mr-1"></i>启用</button>') +
             '</div>' +
           '</td>';
 
@@ -2074,7 +3026,7 @@ const lunarBiz = {
 
         const tbody = document.getElementById('subscriptionsBody');
         if (tbody && showLoading) {
-          tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4"><i class="fas fa-spinner fa-spin mr-2"></i>加载中...</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="6" class="empty-state-cell text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i>正在加载订阅数据...</td></tr>';
         }
 
         const response = await fetch('/api/subscriptions');
@@ -2087,7 +3039,7 @@ const lunarBiz = {
         console.error('加载订阅失败:', error);
         const tbody = document.getElementById('subscriptionsBody');
         if (tbody) {
-          tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-red-500"><i class="fas fa-exclamation-circle mr-2"></i>加载失败，请刷新页面重试</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="6" class="empty-state-cell text-center text-red-500"><i class="fas fa-exclamation-circle mr-2"></i>加载失败，请刷新页面重试</td></tr>';
         }
         showToast('加载订阅列表失败', 'error');
       }
@@ -2999,7 +3951,6 @@ const lunarBiz = {
     // 页面加载时检查时区更新
     window.addEventListener('load', () => {
       checkTimezoneUpdate();
-      loadSubscriptions();
     });
     
     // 定期检查时区更新（每2秒检查一次）
@@ -3102,6 +4053,7 @@ const lunarBiz = {
         if (el) {
           el.textContent = new Date().toLocaleString();
         }
+        loadSubscriptions();
       }
     }
     showSystemTime();
@@ -3151,36 +4103,47 @@ const configPage = `
       opacity: 0.7; 
     }
   </style>
+  <link href="/assets/app.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="app-shell min-h-screen">
   <div id="toast-container"></div>
 
-  <nav class="bg-white shadow-md">
+  <nav class="app-nav">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <i class="fas fa-calendar-check text-indigo-600 text-2xl mr-2"></i>
-          <span class="font-bold text-xl text-gray-800">订阅管理系统</span>
+        <div class="flex items-center gap-3">
+          <span class="brand-mark">
+            <i class="fas fa-calendar-check" aria-hidden="true"></i>
+          </span>
+          <span class="brand-title">
+            <strong>SubsTracker</strong>
+            <span>订阅管理与提醒系统</span>
+          </span>
           <span id="systemTimeDisplay" class="ml-4 text-base text-indigo-600 font-normal"></span>
         </div>
-        <div class="flex items-center space-x-4">
-          <a href="/admin" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-            <i class="fas fa-list mr-1"></i>订阅列表
+        <div class="nav-actions">
+          <a href="/admin" class="nav-link">
+            <i class="fas fa-table-list" aria-hidden="true"></i>订阅列表
           </a>
-          <a href="/admin/config" class="text-indigo-600 border-b-2 border-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
-            <i class="fas fa-cog mr-1"></i>系统配置
+          <a href="/admin/config" class="nav-link is-active">
+            <i class="fas fa-sliders" aria-hidden="true"></i>系统配置
           </a>
-          <a href="/api/logout" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-            <i class="fas fa-sign-out-alt mr-1"></i>退出登录
+          <a href="/api/logout" class="nav-link">
+            <i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i>退出登录
           </a>
         </div>
       </div>
     </div>
   </nav>
   
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6">系统配置</h2>
+  <main class="page-shell">
+    <div class="settings-panel">
+      <div class="section-header">
+        <div>
+          <h2>系统配置</h2>
+          <p class="settings-intro">账户、时区和通知渠道统一管理。</p>
+        </div>
+      </div>
       
       <form id="configForm" class="space-y-8">
         <div class="border-b border-gray-200 pb-6">
@@ -3486,7 +4449,7 @@ const configPage = `
         </div>
       </form>
     </div>
-  </div>
+  </main>
 
   <script>
     function showToast(message, type = 'success', duration = 3000) {
@@ -3498,7 +4461,16 @@ const configPage = `
                    type === 'error' ? 'exclamation-circle' :
                    type === 'warning' ? 'exclamation-triangle' : 'info-circle';
       
-      toast.innerHTML = '<div class="flex items-center"><i class="fas fa-' + icon + ' mr-2"></i><span>' + message + '</span></div>';
+      const content = document.createElement('div');
+      content.className = 'flex items-center';
+      const iconEl = document.createElement('i');
+      iconEl.className = 'fas fa-' + icon + ' mr-2';
+      iconEl.setAttribute('aria-hidden', 'true');
+      const messageEl = document.createElement('span');
+      messageEl.textContent = message;
+      content.appendChild(iconEl);
+      content.appendChild(messageEl);
+      toast.appendChild(content);
       
       container.appendChild(toast);
       setTimeout(() => toast.classList.add('show'), 100);
@@ -4093,7 +5065,7 @@ const api = {
           {
             headers: {
               'Content-Type': 'application/json',
-              'Set-Cookie': 'token=' + token + '; HttpOnly; Path=/; SameSite=Strict; Max-Age=86400'
+              'Set-Cookie': 'token=' + token + '; HttpOnly; Path=/; SameSite=Strict; Max-Age=' + SESSION_MAX_AGE_SECONDS
             }
           }
         );
@@ -4478,11 +5450,12 @@ const api = {
 
 // 工具函数
 function generateRandomSecret() {
-  // 生成一个64字符的随机密钥
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+  const bytes = new Uint8Array(64);
+  crypto.getRandomValues(bytes);
   let result = '';
-  for (let i = 0; i < 64; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  for (let i = 0; i < bytes.length; i++) {
+    result += chars[bytes[i] % chars.length];
   }
   return result;
 }
@@ -4575,15 +5548,16 @@ async function getConfig(env) {
 
 async function generateJWT(username, secret) {
   const header = { alg: 'HS256', typ: 'JWT' };
-  const payload = { username, iat: Math.floor(Date.now() / 1000) };
+  const iat = Math.floor(Date.now() / 1000);
+  const payload = { username, iat, exp: iat + SESSION_MAX_AGE_SECONDS };
 
-  const headerBase64 = btoa(JSON.stringify(header));
-  const payloadBase64 = btoa(JSON.stringify(payload));
+  const headerBase64 = base64UrlEncode(JSON.stringify(header));
+  const payloadBase64 = base64UrlEncode(JSON.stringify(payload));
 
   const signatureInput = headerBase64 + '.' + payloadBase64;
   const signature = await CryptoJS.HmacSHA256(signatureInput, secret);
 
-  return headerBase64 + '.' + payloadBase64 + '.' + signature;
+  return headerBase64 + '.' + payloadBase64 + '.' + base64UrlEncode(signature);
 }
 
 async function verifyJWT(token, secret) {
@@ -4603,12 +5577,16 @@ async function verifyJWT(token, secret) {
     const signatureInput = headerBase64 + '.' + payloadBase64;
     const expectedSignature = await CryptoJS.HmacSHA256(signatureInput, secret);
 
-    if (signature !== expectedSignature) {
+    if (signature !== expectedSignature && signature !== base64UrlEncode(expectedSignature)) {
       console.log('[JWT] 签名验证失败');
       return null;
     }
 
-    const payload = JSON.parse(atob(payloadBase64));
+    const payload = JSON.parse(base64UrlDecode(payloadBase64));
+    if (payload.exp && Math.floor(Date.now() / 1000) > Number(payload.exp)) {
+      console.log('[JWT] Token已过期');
+      return null;
+    }
     console.log('[JWT] 验证成功，用户:', payload.username);
     return payload;
   } catch (error) {
@@ -5690,9 +6668,37 @@ function getCurrentTime(config) {
   };
 }
 
+function base64UrlEncode(value) {
+  const bytes = typeof value === 'string' ? new TextEncoder().encode(value) : value;
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+function base64UrlDecode(value) {
+  const normalized = String(value)
+    .replace(/-/g, '+')
+    .replace(/_/g, '/');
+  const padding = normalized.length % 4 === 0 ? '' : '='.repeat(4 - (normalized.length % 4));
+  const binary = atob(normalized + padding);
+  const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    if (url.pathname === '/assets/app.css') {
+      return new Response(appStyles, {
+        headers: {
+          'Content-Type': 'text/css; charset=utf-8',
+          'Cache-Control': 'public, max-age=3600'
+        }
+      });
+    }
 
     // 添加调试页面
     if (url.pathname === '/debug') {
