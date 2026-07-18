@@ -1,0 +1,20 @@
+{
+  "name": "subscription-managerr",
+  "version": "2.1.0",
+  "private": true,
+  "type": "module",
+  "description": "订阅管理系统 - 基于CloudFlare Workers",
+  "main": "index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "check": "node --check index.js"
+  },
+  "keywords": [
+    "cloudflare-workers",
+    "subscription-management",
+    "notification",
+    "lunar-calendar"
+  ],
+  "license": "MIT"
+}
