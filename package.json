@@ -10,6 +10,9 @@
     "deploy": "wrangler deploy",
     "check": "node --check index.js"
   },
+  "dependencies": {
+    "wrangler": "^4.0.0"
+  },
   "keywords": [
     "cloudflare-workers",
     "subscription-management",
