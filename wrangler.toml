@@ -1,4 +1,4 @@
-name = "subscription-manager"
+name = "subscription-managerr"
 main = "index.js"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
@@ -13,7 +13,7 @@ name = "subscription-manager-staging"
 [[kv_namespaces]]
 binding = "SUBSCRIPTIONS_KV"
 preview_id = "00000000000000000000000000000000"
-id = "00000000000000000000000000000000"
+id = "943d6dd155af449ca8d4f8f7addcff8b"
 
 # 定时任务配置 - 每天早上8点检查
 [triggers]

@@ -437,8 +437,8 @@ const appStyles = `
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
   --shadow-md: 0 14px 30px rgba(15, 23, 42, 0.08);
   --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.16);
-  --radius-sm: 6px;
-  --radius-md: 8px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
 }
 
 * {
@@ -458,8 +458,7 @@ body {
 
 body.bg-gray-100,
 body.app-shell {
-  background:
-    linear-gradient(180deg, #f8fbff 0%, #eef4ff 290px, #f6f8fb 291px, #f6f8fb 100%) !important;
+  background: #f6f8fb !important;
 }
 
 a,
@@ -618,13 +617,12 @@ nav.bg-white {
   gap: 24px;
   align-items: center;
   margin-bottom: 18px;
-  padding: 22px 24px;
-  border: 1px solid rgba(37, 99, 235, 0.22);
-  border-radius: var(--radius-md);
-  color: #fff;
-  background:
-    linear-gradient(135deg, #0f172a 0%, #1d4ed8 58%, #047857 100%);
-  box-shadow: var(--shadow-md);
+  padding: 20px 22px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  color: var(--color-foreground);
+  background: #fff;
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 
@@ -637,14 +635,14 @@ nav.bg-white {
 
 .dashboard-hero p {
   margin: 8px 0 0;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--color-muted);
   line-height: 1.6;
 }
 
 .hero-eyebrow {
   margin-bottom: 8px;
-  color: rgba(255, 255, 255, 0.68);
-  font-size: 0.76rem;
+  color: var(--color-primary);
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -656,10 +654,10 @@ nav.bg-white {
   gap: 8px;
   min-height: 38px;
   padding: 0 12px;
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  border: 1px solid #dbeafe;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.92);
+  background: #eff6ff;
+  color: #1d4ed8;
   white-space: nowrap;
 }
 
@@ -1061,6 +1059,459 @@ nav.bg-white {
   color: var(--color-muted);
 }
 
+.offline-page {
+  display: grid;
+  width: min(420px, calc(100% - 32px));
+  min-height: 100dvh;
+  place-content: center;
+  gap: 16px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.offline-page .brand-mark {
+  margin: 0 auto;
+}
+
+.offline-page h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 780;
+}
+
+.offline-page p {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+.dashboard-hero {
+  padding: 8px 0 20px;
+  border: 0;
+  border-radius: 0;
+  color: var(--color-foreground);
+  background: transparent;
+  box-shadow: none;
+}
+
+.dashboard-hero h1 {
+  max-width: 760px;
+  color: var(--color-foreground);
+  font-size: clamp(1.65rem, 2.4vw, 2.25rem);
+  font-weight: 800;
+}
+
+.dashboard-hero p {
+  color: var(--color-muted);
+}
+
+.hero-eyebrow {
+  color: var(--color-primary);
+  font-size: 0.74rem;
+}
+
+.hero-badge {
+  border-color: #dbeafe;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.content-panel,
+.settings-panel,
+.metric-card {
+  border-radius: 16px;
+}
+
+.metric-card {
+  min-height: 128px;
+  padding: 18px;
+}
+
+.metric-label i {
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: var(--color-primary);
+}
+
+.metric-value {
+  font-size: 2rem;
+}
+
+.section-header {
+  align-items: flex-start;
+}
+
+.section-header .btn-primary,
+#addSubscriptionBtn {
+  min-width: 116px;
+  border-radius: 12px !important;
+}
+
+.toolbar-row {
+  background: #fff;
+}
+
+.mobile-home-hero,
+.mobile-card-list,
+.mobile-category-chips,
+.mobile-bottom-nav {
+  display: none;
+}
+
+.service-avatar {
+  display: inline-grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.subscription-name-cell {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+}
+
+.subscription-name-cell .td-content-wrapper {
+  min-width: 0;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.status-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.status-badge.is-good {
+  background: #ecfdf3;
+  color: #087a49;
+}
+
+.status-badge.is-soon {
+  background: #fff7ed;
+  color: #b45309;
+}
+
+.status-badge.is-danger {
+  background: #fef2f2;
+  color: #b42318;
+}
+
+.status-badge.is-paused {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.action-buttons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.action-buttons-wrapper button {
+  border-radius: 10px !important;
+}
+
+.mobile-subscription-card {
+  border: 1px solid var(--color-border);
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.mobile-card-main {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 15px;
+}
+
+.mobile-card-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.mobile-card-copy strong {
+  display: block;
+  color: var(--color-foreground);
+  font-size: 0.95rem;
+  line-height: 1.25;
+}
+
+.mobile-card-copy p {
+  margin: 4px 0 0;
+  color: #94a3b8;
+  font-size: 0.76rem;
+}
+
+.mobile-card-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding: 12px 15px 15px;
+  border-top: 1px solid #edf2f7;
+}
+
+.mobile-card-meta span {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.68rem;
+}
+
+.mobile-card-meta b {
+  display: block;
+  margin-top: 4px;
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.mobile-card-meta div:nth-child(2) {
+  text-align: center;
+}
+
+.mobile-card-meta div:nth-child(3) {
+  text-align: right;
+}
+
+.mobile-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 15px 15px;
+}
+
+.mobile-card-actions button {
+  min-height: 36px;
+  border-radius: 10px !important;
+  font-size: 0.76rem;
+}
+
+.mobile-empty-state {
+  padding: 22px 16px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 17px;
+  color: var(--color-muted);
+  background: #fff;
+  text-align: center;
+}
+
+.settings-layout {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 18px;
+}
+
+.settings-sidebar {
+  position: sticky;
+  top: 94px;
+  height: max-content;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.settings-sidebar a {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  border-radius: 12px;
+  color: #64748b;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.settings-sidebar a:hover,
+.settings-sidebar a.is-active {
+  background: #eff6ff;
+  color: var(--color-primary);
+}
+
+.settings-card {
+  padding: 22px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.settings-save-bar {
+  position: sticky;
+  bottom: 16px;
+  z-index: 12;
+  display: flex;
+  justify-content: flex-end;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+}
+
+.install-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding: 16px;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  background: #f8fbff;
+}
+
+.install-entry-main {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+
+.install-entry-icon {
+  display: inline-grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.install-entry-copy {
+  flex: 1;
+}
+
+.install-entry-copy b {
+  display: block;
+  font-size: 0.92rem;
+}
+
+.install-entry-copy span {
+  display: block;
+  margin-top: 3px;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+
+.install-entry-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.config-section.inactive {
+  display: none;
+}
+
+.config-section.active {
+  opacity: 1;
+}
+
+.install-page {
+  width: min(430px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 22px 0 calc(94px + env(safe-area-inset-bottom));
+}
+
+.install-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 26px;
+  border-radius: 24px;
+  color: #fff;
+  background: linear-gradient(145deg, #0f2f74, #2563eb);
+  text-align: center;
+}
+
+.install-hero .brand-mark {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 16px;
+  border-radius: 22px;
+  box-shadow: none;
+}
+
+.install-hero h1 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 820;
+}
+
+.install-hero p {
+  margin: 10px 0 20px;
+  color: rgba(255,255,255,0.82);
+  font-size: 0.86rem;
+  line-height: 1.7;
+}
+
+.install-steps {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.install-step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.install-step span {
+  display: inline-grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 9px;
+  background: #eff6ff;
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.install-step b {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.install-step p {
+  margin: 3px 0 0;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1075,6 +1526,21 @@ nav.bg-white {
 @media (max-width: 1024px) {
   .metric-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .settings-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-sidebar {
+    position: static;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+  }
+
+  .settings-sidebar a {
+    flex: 0 0 auto;
   }
 
   .toolbar-row {
@@ -1095,13 +1561,28 @@ nav.bg-white {
 }
 
 @media (max-width: 767px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  body.bg-gray-100,
+  body.app-shell {
+    background: #f6f8fb !important;
+  }
+
+  body.app-shell {
+    padding-bottom: calc(86px + env(safe-area-inset-bottom));
+  }
+
   .app-nav .h-16 {
-    flex-direction: column;
-    align-items: flex-start !important;
+    min-height: 70px;
+    flex-direction: row;
+    align-items: center !important;
   }
 
   .nav-actions {
-    width: 100%;
+    display: none;
   }
 
   .nav-link {
@@ -1115,21 +1596,130 @@ nav.bg-white {
   }
 
   .page-shell {
-    width: min(100% - 24px, 1180px);
-    padding-top: 18px;
+    width: min(100% - 32px, 1180px);
+    padding-top: 16px;
+    padding-bottom: calc(92px + env(safe-area-inset-bottom));
   }
 
   .dashboard-hero {
-    grid-template-columns: 1fr;
-    padding: 18px;
+    display: none;
   }
 
-  .hero-badge {
-    justify-self: flex-start;
+  .mobile-home-hero {
+    display: block;
+    margin-bottom: 18px;
+  }
+
+  .mobile-greeting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .mobile-greeting h1 {
+    margin: 0;
+    font-size: 1.45rem;
+    font-weight: 820;
+  }
+
+  .mobile-greeting p {
+    margin: 4px 0 0;
+    color: #94a3b8;
+    font-size: 0.78rem;
+  }
+
+  .mobile-avatar {
+    display: inline-grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 999px;
+    background: #eff6ff;
+    color: var(--color-primary);
+    font-weight: 800;
+  }
+
+  .mobile-summary-card {
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+    border-radius: 22px;
+    color: #fff;
+    background: linear-gradient(135deg, #2563eb, #5b7cff);
+    box-shadow: 0 16px 28px rgba(37, 99, 235, 0.24);
+  }
+
+  .mobile-summary-card::after {
+    content: "";
+    position: absolute;
+    top: -50px;
+    right: -42px;
+    width: 150px;
+    height: 150px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .mobile-summary-card span,
+  .mobile-summary-card p,
+  .mobile-summary-card small {
+    color: rgba(255,255,255,0.78);
+  }
+
+  .mobile-summary-card strong {
+    display: block;
+    margin-top: 8px;
+    font-size: 2.3rem;
+    line-height: 1;
+    font-weight: 850;
+  }
+
+  .mobile-summary-card p {
+    margin: 5px 0 0;
+    font-size: 0.78rem;
+  }
+
+  .mobile-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .mobile-summary-grid div {
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 15px;
+    background: rgba(255,255,255,0.13);
+  }
+
+  .mobile-summary-grid b {
+    display: block;
+    font-size: 1.18rem;
   }
 
   .metric-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .metric-card {
+    min-height: 104px;
+    padding: 14px;
+  }
+
+  .metric-label {
+    align-items: flex-start;
+    font-size: 0.72rem;
+  }
+
+  .metric-label i {
+    display: none;
+  }
+
+  .metric-value {
+    font-size: 1.55rem;
   }
 
   .section-header,
@@ -1143,17 +1733,69 @@ nav.bg-white {
     box-shadow: none !important;
   }
 
-  .responsive-table td {
-    justify-content: space-between !important;
-    gap: 16px;
+  .table-container {
+    display: none;
   }
 
-  .responsive-table td:before {
-    min-width: 76px;
+  .mobile-card-list {
+    display: grid;
+    gap: 12px;
+    padding: 14px;
   }
 
-  .action-buttons-wrapper {
-    justify-content: flex-start !important;
+  .mobile-category-chips {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 12px 14px 0;
+    scrollbar-width: none;
+  }
+
+  .mobile-category-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-category-chip {
+    flex: 0 0 auto;
+    min-height: 34px;
+    padding: 0 13px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: #fff;
+    color: #64748b;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .mobile-category-chip.is-active {
+    border-color: #bfdbfe;
+    background: #eff6ff;
+    color: var(--color-primary);
+  }
+
+  .toolbar-row {
+    gap: 10px;
+    padding-top: 14px;
+    background: transparent;
+  }
+
+  #categoryFilter,
+  .toolbar-actions {
+    display: none;
+  }
+
+  .section-header {
+    display: block;
+    border-bottom: 0;
+  }
+
+  #addSubscriptionBtn {
+    display: none;
+  }
+
+  .table-meta {
+    border-bottom: 0;
+    padding: 4px 14px 0;
   }
 
   .login-container {
@@ -1175,17 +1817,421 @@ nav.bg-white {
   .settings-panel {
     padding: 18px;
   }
+
+  .settings-sidebar {
+    display: none;
+  }
+
+  .settings-card {
+    padding: 16px;
+  }
+
+  .install-entry {
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 18px;
+  }
+
+  .install-entry-main {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .install-entry-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .install-entry-actions > * {
+    flex: 1;
+  }
+
+  .install-entry .btn-primary {
+    width: 100%;
+    min-width: 0;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .settings-save-bar {
+    left: 0;
+    right: 0;
+    bottom: calc(78px + env(safe-area-inset-bottom));
+    margin: 0 -2px;
+  }
+
+  #subscriptionModal {
+    align-items: flex-end !important;
+    padding-top: 40px;
+  }
+
+  #subscriptionModal > div {
+    width: 100%;
+    max-width: none;
+    max-height: calc(100dvh - 28px);
+    margin: 0;
+    border-radius: 22px 22px 0 0 !important;
+  }
+
+  #subscriptionModal form {
+    padding-bottom: calc(18px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .custom-date-picker {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    top: auto !important;
+    bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+    min-width: 0 !important;
+  }
+
+  .mobile-bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    min-height: calc(74px + env(safe-area-inset-bottom));
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--color-border);
+    background: rgba(255,255,255,0.96);
+    box-shadow: 0 -14px 30px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(16px);
+  }
+
+  .mobile-nav-item,
+  .mobile-nav-add {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+    border: 0;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 0.68rem;
+    font-weight: 700;
+  }
+
+  .mobile-nav-item i,
+  .mobile-nav-add i {
+    font-size: 1rem;
+  }
+
+  .mobile-nav-item.is-active {
+    color: var(--color-primary);
+  }
+
+  .mobile-nav-add i {
+    display: grid;
+    width: 52px;
+    height: 52px;
+    place-items: center;
+    margin-top: -30px;
+    border-radius: 17px;
+    background: var(--color-primary);
+    color: #fff;
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.32);
+  }
 }
 `;
+
+const pwaHeadTags = `
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="别忘订阅">
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/icon-192.svg">
+`;
+
+const APP_CSS_URL = '/assets/app.css?v=20260719';
+
+const pwaRuntimeScript = `
+  <script>
+    window.deferredInstallPrompt = null;
+
+    function isStandaloneMode() {
+      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    }
+
+    function syncInstallUi() {
+      const standalone = isStandaloneMode();
+      const canInstall = !!window.deferredInstallPrompt;
+
+      document.querySelectorAll('[data-install-status]').forEach(node => {
+        if (standalone) {
+          node.textContent = '已安装';
+        } else if (canInstall) {
+          node.textContent = '可安装';
+        } else {
+          node.textContent = '等待浏览器支持';
+        }
+      });
+
+      document.querySelectorAll('[data-install-app]').forEach(button => {
+        button.hidden = standalone ? true : !canInstall;
+        button.disabled = standalone ? true : false;
+      });
+    }
+
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault();
+      window.deferredInstallPrompt = event;
+      syncInstallUi();
+    });
+
+    async function triggerAppInstall() {
+      if (isStandaloneMode()) {
+        alert('别忘订阅已经以应用模式打开。');
+        return;
+      }
+      if (!window.deferredInstallPrompt) {
+        window.location.href = '/admin/install';
+        return;
+      }
+      const promptEvent = window.deferredInstallPrompt;
+      window.deferredInstallPrompt = null;
+      promptEvent.prompt();
+      await promptEvent.userChoice.catch(() => null);
+    }
+
+    window.addEventListener('appinstalled', () => {
+      syncInstallUi();
+    });
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(error => {
+          console.warn('Service Worker 注册失败:', error);
+        });
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', syncInstallUi);
+
+    document.addEventListener('click', event => {
+      const installButton = event.target.closest('[data-install-app]');
+      if (installButton) {
+        event.preventDefault();
+        triggerAppInstall();
+      }
+    });
+  </script>
+`;
+
+function createAppIconSvg(size = 192) {
+  const iconSize = Number(size) || 192;
+  const radius = Math.round(iconSize * 0.23);
+  const inset = Math.round(iconSize * 0.19);
+  const line = Math.max(8, Math.round(iconSize * 0.055));
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${iconSize}" height="${iconSize}" viewBox="0 0 ${iconSize} ${iconSize}" role="img" aria-label="别忘订阅">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="${iconSize}" height="${iconSize}" rx="${radius}" fill="url(#bg)"/>
+  <rect x="${inset}" y="${Math.round(iconSize * 0.28)}" width="${iconSize - inset * 2}" height="${Math.round(iconSize * 0.48)}" rx="${Math.round(iconSize * 0.1)}" fill="none" stroke="#fff" stroke-width="${line}"/>
+  <path d="M${Math.round(iconSize * 0.32)} ${Math.round(iconSize * 0.2)}v${Math.round(iconSize * 0.18)}M${Math.round(iconSize * 0.68)} ${Math.round(iconSize * 0.2)}v${Math.round(iconSize * 0.18)}M${inset} ${Math.round(iconSize * 0.43)}h${iconSize - inset * 2}" fill="none" stroke="#fff" stroke-width="${line}" stroke-linecap="round"/>
+  <path d="m${Math.round(iconSize * 0.36)} ${Math.round(iconSize * 0.58)} ${Math.round(iconSize * 0.12)} ${Math.round(iconSize * 0.12)} ${Math.round(iconSize * 0.2)} -${Math.round(iconSize * 0.24)}" fill="none" stroke="#fff" stroke-width="${line}" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+}
+
+const appManifest = JSON.stringify({
+  name: '别忘订阅',
+  short_name: '别忘订阅',
+  description: '订阅续费提醒与管理工具',
+  start_url: '/admin',
+  scope: '/',
+  display: 'standalone',
+  background_color: '#f6f8fb',
+  theme_color: '#2563eb',
+  icons: [
+    { src: '/assets/icon-192.svg', sizes: '192x192', type: 'image/svg+xml', purpose: 'any' },
+    { src: '/assets/icon-512.svg', sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
+  ]
+}, null, 2);
+
+const serviceWorkerScript = `
+const CACHE_NAME = 'buwang-subscription-v2';
+const STATIC_ASSETS = [
+  '/',
+  '/offline',
+  '/assets/app.css',
+  '/manifest.webmanifest',
+  '/assets/icon.svg',
+  '/assets/icon-192.svg',
+  '/assets/icon-512.svg'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS)));
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys => Promise.all(
+      keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+    ))
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  const url = new URL(request.url);
+
+  if (request.method !== 'GET') {
+    return;
+  }
+
+  if (url.pathname.startsWith('/api')) {
+    return;
+  }
+
+  if (STATIC_ASSETS.includes(url.pathname) || url.pathname.startsWith('/assets/')) {
+    event.respondWith(
+      caches.match(request).then(cached => cached || fetch(request).then(response => {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+        return response;
+      }))
+    );
+    return;
+  }
+
+  if (request.mode === 'navigate') {
+    event.respondWith(fetch(request).catch(() => caches.match('/offline')));
+  }
+});
+`;
+
+const offlinePage = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>离线 - 别忘订阅</title>
+  ${pwaHeadTags}
+  <link href="${APP_CSS_URL}" rel="stylesheet">
+</head>
+<body class="app-shell">
+  <main class="offline-page">
+    <div class="brand-mark" aria-hidden="true"><i class="fas fa-calendar-check"></i></div>
+    <h1>当前离线</h1>
+    <p>别忘订阅需要网络连接才能读取最新订阅和配置。你可以稍后重试，离线缓存不会展示可能过期的数据。</p>
+    <a class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium" href="/admin">重新打开</a>
+  </main>
+  ${pwaRuntimeScript}
+</body>
+</html>`;
+
+const installPage = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>安装应用 - 别忘订阅</title>
+  ${pwaHeadTags}
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="${APP_CSS_URL}" rel="stylesheet">
+</head>
+<body class="app-shell min-h-screen">
+  <nav class="app-nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center gap-3">
+          <span class="brand-mark"><i class="fas fa-calendar-check" aria-hidden="true"></i></span>
+          <span class="brand-title">
+            <strong>别忘订阅</strong>
+            <span>续费提醒与订阅管理</span>
+          </span>
+        </div>
+        <div class="nav-actions">
+          <a href="/admin" class="nav-link"><i class="fas fa-table-list" aria-hidden="true"></i>订阅</a>
+          <a href="/admin/config" class="nav-link"><i class="fas fa-sliders" aria-hidden="true"></i>设置</a>
+          <a href="/admin/install" class="nav-link is-active"><i class="fas fa-download" aria-hidden="true"></i>安装应用</a>
+          <a href="/api/logout" class="nav-link"><i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i>退出登录</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="install-page">
+    <section class="install-hero" aria-labelledby="installTitle">
+      <div class="brand-mark" aria-hidden="true"><i class="fas fa-calendar-check"></i></div>
+      <h1 id="installTitle">安装别忘订阅</h1>
+      <p>把订阅管理放进主屏幕或桌面，打开更快，通知更像原生应用。</p>
+      <div class="flex items-center justify-center gap-2 text-xs">
+        <span class="px-3 py-1 rounded-full bg-white bg-opacity-10">状态</span>
+        <span data-install-status>等待浏览器支持</span>
+      </div>
+      <div class="mt-5 flex flex-col gap-3">
+        <button type="button" class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium" data-install-app hidden>
+          <i class="fas fa-download mr-2" aria-hidden="true"></i>安装应用
+        </button>
+        <a href="/admin" class="btn-secondary text-white px-4 py-2 rounded-md text-sm font-medium">
+          <i class="fas fa-arrow-left mr-2" aria-hidden="true"></i>返回后台
+        </a>
+      </div>
+    </section>
+
+    <section class="install-steps" aria-label="安装步骤">
+      <article class="install-step">
+        <span>1</span>
+        <div>
+          <b>Android Chrome</b>
+          <p>当浏览器提示安装时，点“安装应用”即可。</p>
+        </div>
+      </article>
+      <article class="install-step">
+        <span>2</span>
+        <div>
+          <b>iPhone / iPad Safari</b>
+          <p>点浏览器分享按钮，选择“添加到主屏幕”。</p>
+        </div>
+      </article>
+      <article class="install-step">
+        <span>3</span>
+        <div>
+          <b>确认名称</b>
+          <p>保存后应用名称应显示为“别忘订阅”。</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="mt-4 install-step">
+      <span><i class="fas fa-shield-halved" aria-hidden="true"></i></span>
+      <div>
+        <b>安装后会保留登录态</b>
+        <p>应用入口仍然走 Cloudflare Workers，不会把密钥或订阅数据缓存到离线里。</p>
+      </div>
+    </section>
+  </main>
+
+  ${pwaRuntimeScript}
+</body>
+</html>`;
 
 // 定义HTML模板
 const loginPage = `
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>订阅管理系统</title>
+  <title>登录 - 别忘订阅</title>
+  ${pwaHeadTags}
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
@@ -1215,14 +2261,14 @@ const loginPage = `
       box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
     }
   </style>
-  <link href="/assets/app.css" rel="stylesheet">
+  <link href="${APP_CSS_URL}" rel="stylesheet">
 </head>
 <body class="login-container flex items-center justify-center">
   <main class="login-shell">
     <section class="login-panel" aria-label="SubsTracker 概览">
       <div>
-        <div class="hero-eyebrow">SUBSTRACKER WORKERS EDITION</div>
-        <h1>订阅、续期和提醒的统一控制台</h1>
+        <div class="hero-eyebrow">BUWANG SUBSCRIPTION</div>
+        <h1>别忘订阅，替你盯住每一次续费</h1>
         <p>轻量部署在 Cloudflare Workers，集中管理周期、农历日期、提醒窗口和多渠道推送。</p>
       </div>
       <div class="login-kpis" aria-label="核心能力">
@@ -1246,7 +2292,7 @@ const loginPage = `
         <div class="login-logo">
           <i class="fas fa-calendar-check" aria-hidden="true"></i>
         </div>
-        <h2 class="login-title">登录 SubsTracker</h2>
+        <h2 class="login-title">登录别忘订阅</h2>
         <p class="login-subtitle mt-2">使用管理员账户进入控制台</p>
       </div>
       
@@ -1258,7 +2304,7 @@ const loginPage = `
           <input type="text" id="username" name="username" required autocomplete="username"
             class="input-field w-full px-4 py-3 text-gray-700 focus:outline-none">
         </div>
-        
+
         <div>
           <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
             密码
@@ -1311,17 +2357,19 @@ const loginPage = `
       }
     });
   </script>
+  ${pwaRuntimeScript}
 </body>
 </html>
 `;
 
 const adminPage = `
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>订阅管理系统</title>
+  <title>订阅管理 - 别忘订阅</title>
+  ${pwaHeadTags}
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
@@ -1628,7 +2676,7 @@ const adminPage = `
     .toast.info { background-color: #3b82f6; }
     .toast.warning { background-color: #f59e0b; }
   </style>
-  <link href="/assets/app.css" rel="stylesheet">
+  <link href="${APP_CSS_URL}" rel="stylesheet">
 </head>
 <body class="app-shell min-h-screen">
   <div id="toast-container"></div>
@@ -1641,17 +2689,20 @@ const adminPage = `
             <i class="fas fa-calendar-check" aria-hidden="true"></i>
           </span>
           <span class="brand-title">
-            <strong>SubsTracker</strong>
-            <span>订阅管理与提醒系统</span>
+            <strong>别忘订阅</strong>
+            <span>续费提醒与订阅管理</span>
           </span>
           <span id="systemTimeDisplay" class="ml-4 text-base text-indigo-600 font-normal"></span>
         </div>
         <div class="nav-actions">
           <a href="/admin" class="nav-link is-active">
-            <i class="fas fa-table-list" aria-hidden="true"></i>订阅列表
+            <i class="fas fa-table-list" aria-hidden="true"></i>订阅
           </a>
           <a href="/admin/config" class="nav-link">
-            <i class="fas fa-sliders" aria-hidden="true"></i>系统配置
+            <i class="fas fa-sliders" aria-hidden="true"></i>设置
+          </a>
+          <a href="/admin/install" class="nav-link">
+            <i class="fas fa-download" aria-hidden="true"></i>安装应用
           </a>
           <a href="/api/logout" class="nav-link">
             <i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i>退出登录
@@ -1662,11 +2713,30 @@ const adminPage = `
   </nav>
   
   <main class="page-shell">
+    <section class="mobile-home-hero" aria-label="手机概览">
+      <div class="mobile-greeting">
+        <div>
+          <h1>别忘订阅</h1>
+          <p>今天先看即将到期的项目</p>
+        </div>
+        <a href="/admin/config" class="mobile-avatar" aria-label="进入设置">我</a>
+      </div>
+      <div class="mobile-summary-card">
+        <span>本月订阅概览</span>
+        <strong id="mobileMetricTotal">0</strong>
+        <p id="mobileHealthText">正在同步订阅状态</p>
+        <div class="mobile-summary-grid">
+          <div><b id="mobileMetricActive">0</b><small>启用中</small></div>
+          <div><b id="mobileMetricSoon">0</b><small>即将到期</small></div>
+        </div>
+      </div>
+    </section>
+
     <section class="dashboard-hero">
       <div>
-        <div class="hero-eyebrow">SUBSCRIPTION OPERATIONS</div>
-        <h1>订阅运营看板</h1>
-        <p>按到期时间、提醒窗口和启用状态管理所有订阅。</p>
+        <div class="hero-eyebrow">订阅管理</div>
+        <h1>集中查看续费日期、费用和提醒状态。</h1>
+        <p>轻量部署在 Cloudflare Workers，保留原有提醒、Cron 和多渠道通知能力。</p>
       </div>
       <div class="hero-badge">
         <i class="fas fa-bolt" aria-hidden="true"></i>
@@ -1698,7 +2768,7 @@ const adminPage = `
       </article>
     </section>
 
-    <section class="content-panel">
+    <section class="content-panel" id="subscriptionListPanel">
       <div class="section-header">
         <div>
           <h2>订阅列表</h2>
@@ -1724,6 +2794,8 @@ const adminPage = `
           </label>
         </div>
       </div>
+
+      <div id="mobileCategoryChips" class="mobile-category-chips" aria-label="分类筛选"></div>
 
       <div class="table-meta">
         <span id="tableResultCount">等待加载订阅数据</span>
@@ -1759,8 +2831,17 @@ const adminPage = `
           </table>
         </div>
       </div>
+      <div id="mobileSubscriptionCards" class="mobile-card-list" aria-live="polite"></div>
     </section>
   </main>
+
+  <nav class="mobile-bottom-nav" aria-label="手机底部导航">
+    <a href="/admin" class="mobile-nav-item is-active"><i class="fas fa-house" aria-hidden="true"></i><span>首页</span></a>
+    <a href="#subscriptionListPanel" class="mobile-nav-item"><i class="fas fa-list" aria-hidden="true"></i><span>订阅</span></a>
+    <button id="mobileAddSubscriptionBtn" class="mobile-nav-add" type="button" aria-label="添加订阅"><i class="fas fa-plus" aria-hidden="true"></i><span>添加</span></button>
+    <a href="#subscriptionListPanel" class="mobile-nav-item"><i class="fas fa-bell" aria-hidden="true"></i><span>提醒</span></a>
+    <a href="/admin/config" class="mobile-nav-item"><i class="fas fa-user" aria-hidden="true"></i><span>我的</span></a>
+  </nav>
 
   <!-- 添加/编辑订阅的模态框 -->
   <div id="subscriptionModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 modal-container hidden flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -1797,6 +2878,26 @@ const adminPage = `
             <input type="text" id="category" placeholder="例如：个人、家庭、公司"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
             <p class="mt-1 text-xs text-gray-500">可输入多个标签并使用“/”分隔，便于筛选和统计</p>
+            <div class="error-message text-red-500"></div>
+          </div>
+
+          <div>
+            <label for="price" class="block text-sm font-medium text-gray-700 mb-1">费用</label>
+            <input type="number" id="price" min="0" step="0.01" inputmode="decimal" placeholder="例如：22.99"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            <div class="error-message text-red-500"></div>
+          </div>
+
+          <div>
+            <label for="currency" class="block text-sm font-medium text-gray-700 mb-1">币种</label>
+            <select id="currency"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+              <option value="CNY">CNY</option>
+              <option value="USD">USD</option>
+              <option value="HKD">HKD</option>
+              <option value="EUR">EUR</option>
+              <option value="JPY">JPY</option>
+            </select>
             <div class="error-message text-red-500"></div>
           </div>
         </div>
@@ -2561,6 +3662,28 @@ const lunarBiz = {
       } else {
         select.value = '';
       }
+
+      const chipContainer = document.getElementById('mobileCategoryChips');
+      if (chipContainer) {
+        const total = Array.isArray(subscriptions) ? subscriptions.length : 0;
+        chipContainer.innerHTML =
+          '<button type="button" class="mobile-category-chip" data-category="">全部 ' + total + '</button>' +
+          sorted.map(cat => {
+            const count = (subscriptions || []).filter(subscription =>
+              normalizeCategoryTokens(subscription.category).some(token => token.toLowerCase() === cat.toLowerCase())
+            ).length;
+            return '<button type="button" class="mobile-category-chip" data-category="' + escapeAttribute(cat) + '">' +
+              escapeHtml(cat) + ' ' + count +
+            '</button>';
+          }).join('');
+
+        chipContainer.querySelectorAll('.mobile-category-chip').forEach(chip => {
+          chip.addEventListener('click', () => {
+            select.value = chip.dataset.category || '';
+            renderSubscriptionTable();
+          });
+        });
+      }
     }
 
     function getReminderSettings(subscription) {
@@ -2655,6 +3778,9 @@ const lunarBiz = {
       setText('metricActive', active);
       setText('metricSoon', soon);
       setText('metricExpired', expired);
+      setText('mobileMetricTotal', total);
+      setText('mobileMetricActive', active);
+      setText('mobileMetricSoon', soon);
 
       const activeBar = document.getElementById('metricActiveBar');
       if (activeBar) {
@@ -2662,16 +3788,20 @@ const lunarBiz = {
       }
 
       const healthText = document.getElementById('dashboardHealthText');
+      const mobileHealthText = document.getElementById('mobileHealthText');
+      let healthMessage = '暂无订阅数据';
       if (healthText) {
         if (expired > 0) {
-          healthText.textContent = expired + ' 项过期待处理';
+          healthMessage = expired + ' 项过期待处理';
         } else if (soon > 0) {
-          healthText.textContent = soon + ' 项即将到期';
+          healthMessage = soon + ' 项即将到期';
         } else if (total > 0) {
-          healthText.textContent = '运行状态正常';
-        } else {
-          healthText.textContent = '暂无订阅数据';
+          healthMessage = '运行状态正常';
         }
+        healthText.textContent = healthMessage;
+      }
+      if (mobileHealthText) {
+        mobileHealthText.textContent = healthMessage;
       }
     }
 
@@ -2760,6 +3890,7 @@ const lunarBiz = {
 
     function renderSubscriptionTable() {
       const tbody = document.getElementById('subscriptionsBody');
+      const mobileCards = document.getElementById('mobileSubscriptionCards');
       if (!tbody) {
         return;
       }
@@ -2770,6 +3901,11 @@ const lunarBiz = {
       const keyword = searchInput ? searchInput.value.trim().toLowerCase() : '';
       const categorySelect = document.getElementById('categoryFilter');
       const selectedCategory = categorySelect ? categorySelect.value.trim().toLowerCase() : '';
+
+      document.querySelectorAll('.mobile-category-chip').forEach(chip => {
+        const chipValue = (chip.dataset.category || '').trim().toLowerCase();
+        chip.classList.toggle('is-active', chipValue === selectedCategory);
+      });
 
       let filtered = Array.isArray(subscriptionsCache) ? [...subscriptionsCache] : [];
 
@@ -2796,11 +3932,17 @@ const lunarBiz = {
 
       if (filtered.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" class="empty-state-cell text-center text-gray-500"><i class="fas fa-magnifying-glass mr-2"></i>没有符合条件的订阅</td></tr>';
+        if (mobileCards) {
+          mobileCards.innerHTML = '<div class="mobile-empty-state"><i class="fas fa-magnifying-glass mr-2" aria-hidden="true"></i>没有符合条件的订阅</div>';
+        }
         return;
       }
 
       filtered.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
       tbody.innerHTML = '';
+      if (mobileCards) {
+        mobileCards.innerHTML = '';
+      }
 
       const currentTime = new Date();
 
@@ -2841,15 +3983,19 @@ const lunarBiz = {
           : daysDiff >= 0 && daysDiff <= reminder.value;
 
         let statusHtml = '';
+        let statusText = '正常';
+        let statusClass = 'is-good';
         if (subscription.isActive === false) {
-          statusHtml = '<span class="px-2 py-1 text-xs font-medium rounded-full text-white bg-gray-500"><i class="fas fa-pause-circle mr-1"></i>已停用</span>';
+          statusText = '已停用';
+          statusClass = 'is-paused';
         } else if (daysDiff < 0) {
-          statusHtml = '<span class="px-2 py-1 text-xs font-medium rounded-full text-white bg-red-500"><i class="fas fa-exclamation-circle mr-1"></i>已过期</span>';
+          statusText = '已过期';
+          statusClass = 'is-danger';
         } else if (isSoon) {
-          statusHtml = '<span class="px-2 py-1 text-xs font-medium rounded-full text-white bg-yellow-500"><i class="fas fa-exclamation-triangle mr-1"></i>即将到期</span>';
-        } else {
-          statusHtml = '<span class="px-2 py-1 text-xs font-medium rounded-full text-white bg-green-500"><i class="fas fa-check-circle mr-1"></i>正常</span>';
+          statusText = daysDiff === 0 ? '今天到期' : daysDiff + ' 天';
+          statusClass = 'is-soon';
         }
+        statusHtml = '<span class="status-badge ' + statusClass + '">' + statusText + '</span>';
 
         let periodText = '';
         if (subscription.periodValue && subscription.periodUnit) {
@@ -2902,6 +4048,19 @@ const lunarBiz = {
             ).join('') + '</div>'
           : '';
 
+        const displayName = String(subscription.name || '未命名');
+        const initials = displayName.trim().slice(0, 2).toUpperCase() || '订';
+        const avatarPalette = ['#ef4444', '#111827', '#635bff', '#16a34a', '#0284c7', '#7c3aed', '#db2777'];
+        const avatarIndex = displayName.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0) % avatarPalette.length;
+        const avatarHtml = '<span class="service-avatar" style="background:' + avatarPalette[avatarIndex] + '">' + escapeHtml(initials) + '</span>';
+        const priceText = subscription.price
+          ? (escapeHtml(subscription.currency || 'CNY') + ' ' + escapeHtml(String(subscription.price)))
+          : '未填写';
+        const mobileSubtitle = [
+          subscription.customType || '其他',
+          categoryTokens[0] || (subscription.autoRenew !== false ? '自动续费' : '手动续费')
+        ].filter(Boolean).map(item => escapeHtml(item)).join(' · ');
+
         function formatDateInTimezone(date, timezone) {
           return date.toLocaleDateString('zh-CN', {
             timeZone: timezone,
@@ -2942,11 +4101,15 @@ const lunarBiz = {
         const safeId = escapeAttribute(subscription.id);
 
         row.innerHTML =
-          '<td data-label="名称" class="px-4 py-3"><div class="td-content-wrapper">' +
-            nameHtml +
-            notesHtml +
+          '<td data-label="名称" class="px-4 py-3"><div class="subscription-name-cell">' +
+            avatarHtml +
+            '<div class="td-content-wrapper">' +
+              nameHtml +
+              notesHtml +
+            '</div>' +
           '</div></td>' +
           '<td data-label="类型" class="px-4 py-3"><div class="td-content-wrapper space-y-1">' +
+            '<div class="text-sm font-semibold text-gray-900">费用：' + priceText + '</div>' +
             '<div class="flex items-center gap-1">' +
               '<i class="fas fa-layer-group text-gray-400"></i>' +
               typeHtml +
@@ -2977,6 +4140,33 @@ const lunarBiz = {
           '</td>';
 
         tbody.appendChild(row);
+        if (mobileCards) {
+          const card = document.createElement('article');
+          card.className = 'mobile-subscription-card';
+          card.innerHTML =
+            '<div class="mobile-card-main">' +
+              avatarHtml +
+              '<div class="mobile-card-copy">' +
+                '<strong>' + escapeHtml(displayName) + '</strong>' +
+                '<p>' + mobileSubtitle + '</p>' +
+              '</div>' +
+              statusHtml +
+            '</div>' +
+            '<div class="mobile-card-meta">' +
+              '<div><span>费用</span><b>' + priceText + '</b></div>' +
+              '<div><span>续费日期</span><b>' + expiryDateText + '</b></div>' +
+              '<div><span>提醒</span><b>' + escapeHtml(reminder.displayText) + '</b></div>' +
+            '</div>' +
+            '<div class="mobile-card-actions">' +
+              '<button class="edit btn-primary text-white px-3 py-1 rounded text-xs whitespace-nowrap" data-id="' + safeId + '"><i class="fas fa-edit mr-1"></i>编辑</button>' +
+              '<button class="test-notify btn-info text-white px-3 py-1 rounded text-xs whitespace-nowrap" data-id="' + safeId + '"><i class="fas fa-paper-plane mr-1"></i>测试</button>' +
+              (subscription.isActive !== false
+                ? '<button class="toggle-status btn-warning text-white px-3 py-1 rounded text-xs whitespace-nowrap" data-id="' + safeId + '" data-action="deactivate"><i class="fas fa-pause-circle mr-1"></i>停用</button>'
+                : '<button class="toggle-status btn-success text-white px-3 py-1 rounded text-xs whitespace-nowrap" data-id="' + safeId + '" data-action="activate"><i class="fas fa-play-circle mr-1"></i>启用</button>') +
+              '<button class="delete btn-danger text-white px-3 py-1 rounded text-xs whitespace-nowrap" data-id="' + safeId + '"><i class="fas fa-trash-alt mr-1"></i>删除</button>' +
+            '</div>';
+          mobileCards.appendChild(card);
+        }
       });
 
       document.querySelectorAll('.edit').forEach(button => {
@@ -3025,8 +4215,12 @@ const lunarBiz = {
         }
 
         const tbody = document.getElementById('subscriptionsBody');
+        const mobileCards = document.getElementById('mobileSubscriptionCards');
         if (tbody && showLoading) {
           tbody.innerHTML = '<tr><td colspan="6" class="empty-state-cell text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i>正在加载订阅数据...</td></tr>';
+        }
+        if (mobileCards && showLoading) {
+          mobileCards.innerHTML = '<div class="mobile-empty-state"><i class="fas fa-spinner fa-spin mr-2" aria-hidden="true"></i>正在加载订阅数据...</div>';
         }
 
         const response = await fetch('/api/subscriptions');
@@ -3038,8 +4232,12 @@ const lunarBiz = {
       } catch (error) {
         console.error('加载订阅失败:', error);
         const tbody = document.getElementById('subscriptionsBody');
+        const mobileCards = document.getElementById('mobileSubscriptionCards');
         if (tbody) {
           tbody.innerHTML = '<tr><td colspan="6" class="empty-state-cell text-center text-red-500"><i class="fas fa-exclamation-circle mr-2"></i>加载失败，请刷新页面重试</td></tr>';
+        }
+        if (mobileCards) {
+          mobileCards.innerHTML = '<div class="mobile-empty-state text-red-500"><i class="fas fa-exclamation-circle mr-2" aria-hidden="true"></i>加载失败，请刷新页面重试</div>';
         }
         showToast('加载订阅列表失败', 'error');
       }
@@ -3114,6 +4312,8 @@ const lunarBiz = {
       const today = new Date().toISOString().split('T')[0]; // 前端使用本地时间
       document.getElementById('startDate').value = today;
       document.getElementById('category').value = '';
+      document.getElementById('price').value = '';
+      document.getElementById('currency').value = 'CNY';
       document.getElementById('reminderValue').value = '7';
       document.getElementById('reminderUnit').value = 'day';
       document.getElementById('isActive').checked = true;
@@ -3123,6 +4323,13 @@ const lunarBiz = {
       calculateExpiryDate();
       setupModalEventListeners();
     });
+
+    const mobileAddSubscriptionBtn = document.getElementById('mobileAddSubscriptionBtn');
+    if (mobileAddSubscriptionBtn) {
+      mobileAddSubscriptionBtn.addEventListener('click', () => {
+        document.getElementById('addSubscriptionBtn').click();
+      });
+    }
 
     // 自定义日期选择器功能
     class CustomDatePicker {
@@ -3787,6 +4994,8 @@ const lunarBiz = {
         name: document.getElementById('name').value.trim(),
         customType: document.getElementById('customType').value.trim(),
         category: document.getElementById('category').value.trim(),
+        price: document.getElementById('price').value.trim(),
+        currency: document.getElementById('currency').value,
         notes: document.getElementById('notes').value.trim() || '',
         isActive: document.getElementById('isActive').checked,
         autoRenew: document.getElementById('autoRenew').checked,
@@ -3848,6 +5057,8 @@ const lunarBiz = {
           document.getElementById('name').value = subscription.name;
           document.getElementById('customType').value = subscription.customType || '';
           document.getElementById('category').value = subscription.category || '';
+          document.getElementById('price').value = subscription.price || '';
+          document.getElementById('currency').value = subscription.currency || 'CNY';
           document.getElementById('notes').value = subscription.notes || '';
           document.getElementById('isActive').checked = subscription.isActive !== false;
           document.getElementById('autoRenew').checked = subscription.autoRenew !== false;
@@ -4058,17 +5269,19 @@ const lunarBiz = {
     }
     showSystemTime();
   </script>
+  ${pwaRuntimeScript}
 </body>
 </html>
 `;
 
 const configPage = `
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>系统配置 - 订阅管理系统</title>
+  <title>系统设置 - 别忘订阅</title>
+  ${pwaHeadTags}
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
@@ -4103,7 +5316,7 @@ const configPage = `
       opacity: 0.7; 
     }
   </style>
-  <link href="/assets/app.css" rel="stylesheet">
+  <link href="${APP_CSS_URL}" rel="stylesheet">
 </head>
 <body class="app-shell min-h-screen">
   <div id="toast-container"></div>
@@ -4116,17 +5329,20 @@ const configPage = `
             <i class="fas fa-calendar-check" aria-hidden="true"></i>
           </span>
           <span class="brand-title">
-            <strong>SubsTracker</strong>
-            <span>订阅管理与提醒系统</span>
+            <strong>别忘订阅</strong>
+            <span>续费提醒与订阅管理</span>
           </span>
           <span id="systemTimeDisplay" class="ml-4 text-base text-indigo-600 font-normal"></span>
         </div>
         <div class="nav-actions">
           <a href="/admin" class="nav-link">
-            <i class="fas fa-table-list" aria-hidden="true"></i>订阅列表
+            <i class="fas fa-table-list" aria-hidden="true"></i>订阅
           </a>
           <a href="/admin/config" class="nav-link is-active">
-            <i class="fas fa-sliders" aria-hidden="true"></i>系统配置
+            <i class="fas fa-sliders" aria-hidden="true"></i>设置
+          </a>
+          <a href="/admin/install" class="nav-link">
+            <i class="fas fa-download" aria-hidden="true"></i>安装应用
           </a>
           <a href="/api/logout" class="nav-link">
             <i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i>退出登录
@@ -4137,16 +5353,42 @@ const configPage = `
   </nav>
   
   <main class="page-shell">
-    <div class="settings-panel">
-      <div class="section-header">
-        <div>
-          <h2>系统配置</h2>
-          <p class="settings-intro">账户、时区和通知渠道统一管理。</p>
+    <div class="settings-layout">
+      <aside class="settings-sidebar" aria-label="设置目录">
+        <a href="#accountSection" class="is-active"><i class="fas fa-user" aria-hidden="true"></i>账户</a>
+        <a href="#displaySection"><i class="fas fa-eye" aria-hidden="true"></i>显示</a>
+        <a href="#timezoneSection"><i class="fas fa-globe" aria-hidden="true"></i>时区</a>
+        <a href="#notifySection"><i class="fas fa-bell" aria-hidden="true"></i>提醒</a>
+        <a href="#telegramConfig"><i class="fas fa-paper-plane" aria-hidden="true"></i>通知渠道</a>
+        <a href="#thirdPartyToken"><i class="fas fa-shield-halved" aria-hidden="true"></i>安全与 API</a>
+      </aside>
+      <div class="settings-panel">
+        <div class="section-header">
+          <div>
+            <h2>系统配置</h2>
+            <p class="settings-intro">账户、时区和通知渠道统一管理。</p>
+          </div>
         </div>
-      </div>
-      
+        <div class="install-entry">
+          <div class="install-entry-main">
+            <div class="install-entry-icon"><i class="fas fa-download" aria-hidden="true"></i></div>
+            <div class="install-entry-copy">
+              <b>安装到手机桌面</b>
+              <span>在支持的浏览器中将别忘订阅保存成独立应用。</span>
+            </div>
+          </div>
+          <div class="install-entry-actions">
+            <button type="button" class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium" data-install-app hidden>
+              <i class="fas fa-download mr-2" aria-hidden="true"></i>安装
+            </button>
+            <a href="/admin/install" class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium">
+              <i class="fas fa-circle-info mr-2" aria-hidden="true"></i>查看
+            </a>
+          </div>
+        </div>
+
       <form id="configForm" class="space-y-8">
-        <div class="border-b border-gray-200 pb-6">
+        <section id="accountSection" class="settings-card border-b border-gray-200 pb-6">
           <h3 class="text-lg font-medium text-gray-900 mb-4">管理员账户</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -4159,9 +5401,9 @@ const configPage = `
               <p class="mt-1 text-sm text-gray-500">留空表示不修改当前密码</p>
             </div>
           </div>
-        </div>
+        </section>
         
-        <div class="border-b border-gray-200 pb-6">
+        <section id="displaySection" class="settings-card border-b border-gray-200 pb-6">
           <h3 class="text-lg font-medium text-gray-900 mb-4">显示设置</h3>
           
           
@@ -4172,10 +5414,10 @@ const configPage = `
             </label>
             <p class="mt-1 text-sm text-gray-500">控制是否在通知消息中包含农历日期信息</p>
           </div>
-        </div>
+        </section>
 
 
-        <div class="border-b border-gray-200 pb-6">
+        <section id="timezoneSection" class="settings-card border-b border-gray-200 pb-6">
           <h3 class="text-lg font-medium text-gray-900 mb-4">时区设置</h3>
           <div class="mb-6">
           <label for="timezone" class="block text-sm font-medium text-gray-700 mb-1">时区选择</label>
@@ -4201,10 +5443,10 @@ const configPage = `
           </select>
             <p class="mt-1 text-sm text-gray-500">选择需要使用时区，系统会按该时区计算剩余时间（提醒 Cron 仍基于 UTC，请在 Cloudflare 控制台换算触发时间）</p>
           </div>
-        </div>
+        </section>
 
         
-        <div class="border-b border-gray-200 pb-6">
+        <section id="notifySection" class="settings-card border-b border-gray-200 pb-6">
           <h3 class="text-lg font-medium text-gray-900 mb-4">通知设置</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
@@ -4442,12 +5684,19 @@ const configPage = `
           </div>
         </div>
 
-        <div class="flex justify-end">
+        <div class="settings-save-bar">
           <button type="submit" class="btn-primary text-white px-6 py-2 rounded-md text-sm font-medium">
             <i class="fas fa-save mr-2"></i>保存配置
           </button>
         </div>
       </form>
+      <nav class="mobile-bottom-nav" aria-label="手机底部导航">
+        <a href="/admin" class="mobile-nav-item"><i class="fas fa-house" aria-hidden="true"></i><span>首页</span></a>
+        <a href="/admin#subscriptionListPanel" class="mobile-nav-item"><i class="fas fa-list" aria-hidden="true"></i><span>订阅</span></a>
+        <button id="mobileAddSubscriptionBtnConfig" class="mobile-nav-add" type="button" aria-label="添加订阅"><i class="fas fa-plus" aria-hidden="true"></i><span>添加</span></button>
+        <a href="#notifySection" class="mobile-nav-item"><i class="fas fa-bell" aria-hidden="true"></i><span>提醒</span></a>
+        <a href="/admin/config" class="mobile-nav-item is-active"><i class="fas fa-user" aria-hidden="true"></i><span>我的</span></a>
+      </nav>
     </div>
   </main>
 
@@ -5028,6 +6277,12 @@ const admin = {
 
       if (pathname === '/admin/config') {
         return new Response(configPage, {
+          headers: { 'Content-Type': 'text/html; charset=utf-8' }
+        });
+      }
+
+      if (pathname === '/admin/install') {
+        return new Response(installPage, {
           headers: { 'Content-Type': 'text/html; charset=utf-8' }
         });
       }
@@ -5663,6 +6918,8 @@ async function createSubscription(subscription, env) {
       name: subscription.name,
       customType: subscription.customType || '',
       category: subscription.category ? subscription.category.trim() : '',
+      price: subscription.price !== undefined && subscription.price !== null ? String(subscription.price).trim() : '',
+      currency: subscription.currency || 'CNY',
       startDate: subscription.startDate || null,
       expiryDate: subscription.expiryDate,
       periodValue: subscription.periodValue || 1,
@@ -5755,6 +7012,8 @@ if (useLunar) {
       name: subscription.name,
       customType: subscription.customType || subscriptions[index].customType || '',
       category: subscription.category !== undefined ? subscription.category.trim() : (subscriptions[index].category || ''),
+      price: subscription.price !== undefined && subscription.price !== null ? String(subscription.price).trim() : (subscriptions[index].price || ''),
+      currency: subscription.currency || subscriptions[index].currency || 'CNY',
       startDate: subscription.startDate || subscriptions[index].startDate,
       expiryDate: subscription.expiryDate,
       periodValue: subscription.periodValue || subscriptions[index].periodValue || 1,
@@ -6690,6 +7949,43 @@ function base64UrlDecode(value) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    if (url.pathname === '/manifest.webmanifest') {
+      return new Response(appManifest, {
+        headers: {
+          'Content-Type': 'application/manifest+json; charset=utf-8',
+          'Cache-Control': 'public, max-age=86400'
+        }
+      });
+    }
+
+    if (url.pathname === '/sw.js') {
+      return new Response(serviceWorkerScript, {
+        headers: {
+          'Content-Type': 'application/javascript; charset=utf-8',
+          'Cache-Control': 'no-cache'
+        }
+      });
+    }
+
+    if (url.pathname === '/offline') {
+      return new Response(offlinePage, {
+        headers: {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'no-cache'
+        }
+      });
+    }
+
+    if (url.pathname === '/assets/icon.svg' || url.pathname === '/assets/icon-192.svg' || url.pathname === '/assets/icon-512.svg') {
+      const iconSize = url.pathname.includes('512') ? 512 : 192;
+      return new Response(createAppIconSvg(iconSize), {
+        headers: {
+          'Content-Type': 'image/svg+xml; charset=utf-8',
+          'Cache-Control': 'public, max-age=86400'
+        }
+      });
+    }
 
     if (url.pathname === '/assets/app.css') {
       return new Response(appStyles, {
