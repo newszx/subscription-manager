@@ -2438,6 +2438,14 @@ textarea:focus {
   display: none !important;
 }
 
+.brand-title span {
+  display: none !important;
+}
+
+.settings-panel .section-header {
+  margin-bottom: 8px;
+}
+
 .page-shell {
   padding-top: 22px;
 }
@@ -2446,13 +2454,37 @@ textarea:focus {
   border-radius: var(--radius-md);
 }
 
+.settings-panel form.space-y-8 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0 !important;
+}
+
 .settings-card {
-  margin-bottom: 12px;
+  margin-bottom: 0;
+  padding: 14px 0;
 }
 
 .settings-card h3 {
-  margin-bottom: 14px !important;
+  margin-bottom: 10px !important;
   font-size: 1rem !important;
+}
+
+.config-section {
+  margin-top: 0;
+  padding: 14px 0 !important;
+  border: 0 !important;
+  border-top: 1px solid var(--color-border) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+.config-section.active,
+.config-section.inactive {
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+.settings-card {
+  border-bottom: 1px solid var(--color-border) !important;
 }
 
 .settings-card:last-of-type {
@@ -2460,12 +2492,41 @@ textarea:focus {
 }
 
 @media (max-width: 767px) {
+  body.app-shell {
+    padding-bottom: calc(66px + env(safe-area-inset-bottom));
+  }
+
   .page-shell {
     padding-top: 16px;
+    padding-bottom: calc(74px + env(safe-area-inset-bottom));
   }
 
   .content-panel {
     border: 0;
+  }
+
+  .settings-save-bar {
+    bottom: calc(66px + env(safe-area-inset-bottom));
+  }
+
+  .mobile-bottom-nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    min-height: calc(60px + env(safe-area-inset-bottom));
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+  }
+
+  .mobile-nav-item,
+  .mobile-nav-add {
+    min-height: 48px;
+    gap: 2px;
+  }
+
+  .mobile-nav-add i {
+    width: 28px !important;
+    height: 28px !important;
+    margin-top: 0 !important;
+    border-radius: 999px !important;
+    box-shadow: none !important;
   }
 }
 `;
@@ -2481,7 +2542,7 @@ const pwaHeadTags = `
   <link rel="apple-touch-icon" href="/assets/icon-192.svg">
 `;
 
-const APP_CSS_URL = '/assets/app.css?v=20260720-simple4';
+const APP_CSS_URL = '/assets/app.css?v=20260720-simple5';
 
 const pwaRuntimeScript = `
   <script>
@@ -2530,7 +2591,7 @@ const appManifest = JSON.stringify({
 }, null, 2);
 
 const serviceWorkerScript = `
-const CACHE_NAME = 'buwang-subscription-v6';
+const CACHE_NAME = 'buwang-subscription-v7';
 const STATIC_ASSETS = [
   '/',
   '/offline',
@@ -3049,7 +3110,6 @@ const adminPage = `
           </span>
           <span class="brand-title">
             <strong>别忘订阅</strong>
-            <span>续费提醒与订阅管理</span>
           </span>
           <span id="systemTimeDisplay" class="ml-4 text-base text-indigo-600 font-normal"></span>
         </div>
@@ -3061,7 +3121,7 @@ const adminPage = `
             <i class="fas fa-sliders" aria-hidden="true"></i>设置
           </a>
           <a href="/api/logout" class="nav-link">
-            <i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i>退出登录
+            <i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i>退出
           </a>
         </div>
       </div>
@@ -3132,11 +3192,9 @@ const adminPage = `
   </main>
 
   <nav class="mobile-bottom-nav" aria-label="手机底部导航">
-    <a href="/admin" class="mobile-nav-item is-active"><i class="fas fa-house" aria-hidden="true"></i><span>首页</span></a>
-    <a href="#subscriptionListPanel" class="mobile-nav-item"><i class="fas fa-list" aria-hidden="true"></i><span>订阅</span></a>
+    <a href="/admin" class="mobile-nav-item is-active"><i class="fas fa-list" aria-hidden="true"></i><span>订阅</span></a>
     <button id="mobileAddSubscriptionBtn" class="mobile-nav-add" type="button" aria-label="添加订阅"><i class="fas fa-plus" aria-hidden="true"></i><span>添加</span></button>
-    <a href="#subscriptionListPanel" class="mobile-nav-item"><i class="fas fa-bell" aria-hidden="true"></i><span>提醒</span></a>
-    <a href="/admin/config" class="mobile-nav-item"><i class="fas fa-user" aria-hidden="true"></i><span>我的</span></a>
+    <a href="/admin/config" class="mobile-nav-item"><i class="fas fa-sliders" aria-hidden="true"></i><span>设置</span></a>
   </nav>
 
   <!-- 添加/编辑订阅的模态框 -->
@@ -3173,7 +3231,6 @@ const adminPage = `
             <label for="category" class="block text-sm font-medium text-gray-700 mb-1">分类标签</label>
             <input type="text" id="category" placeholder="例如：个人、家庭、公司"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            <p class="mt-1 text-xs text-gray-500">可输入多个标签并使用“/”分隔，便于筛选和统计</p>
             <div class="error-message text-red-500"></div>
           </div>
 
@@ -3435,7 +3492,6 @@ const adminPage = `
                 <option value="hour">小时</option>
               </select>
             </div>
-            <p class="text-xs text-gray-500 mt-1">0 = 仅在到期时提醒；选择“小时”需要将 Worker 定时任务调整为小时级执行</p>
             <div class="error-message text-red-500"></div>
           </div>
           
@@ -5579,7 +5635,6 @@ const configPage = `
           </span>
           <span class="brand-title">
             <strong>别忘订阅</strong>
-            <span>续费提醒与订阅管理</span>
           </span>
           <span id="systemTimeDisplay" class="ml-4 text-base text-indigo-600 font-normal"></span>
         </div>
@@ -5591,7 +5646,7 @@ const configPage = `
             <i class="fas fa-sliders" aria-hidden="true"></i>设置
           </a>
           <a href="/api/logout" class="nav-link">
-            <i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i>退出登录
+            <i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i>退出
           </a>
         </div>
       </div>
@@ -5604,7 +5659,6 @@ const configPage = `
         <div class="section-header">
           <div>
             <h2>系统配置</h2>
-            <p class="settings-intro">账户、时区和通知渠道统一管理。</p>
           </div>
         </div>
 
@@ -5633,7 +5687,6 @@ const configPage = `
               <input type="checkbox" id="showLunarGlobal" class="form-checkbox h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" checked>
               <span class="ml-2 text-sm text-gray-700">在通知中显示农历日期</span>
             </label>
-            <p class="mt-1 text-sm text-gray-500">控制是否在通知消息中包含农历日期信息</p>
           </div>
         </section>
 
@@ -5662,24 +5715,17 @@ const configPage = `
             <option value="Australia/Melbourne">墨尔本时间（UTC+10）</option>
             <option value="Pacific/Auckland">奥克兰时间（UTC+12）</option>
           </select>
-            <p class="mt-1 text-sm text-gray-500">选择需要使用时区，系统会按该时区计算剩余时间（提醒 Cron 仍基于 UTC，请在 Cloudflare 控制台换算触发时间）</p>
           </div>
         </section>
 
         
         <section id="notifySection" class="settings-card border-b border-gray-200 pb-6">
           <h3 class="text-lg font-medium text-gray-900 mb-4">通知设置</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div class="mb-6">
             <div>
               <label for="notificationHours" class="block text-sm font-medium text-gray-700">通知时段（UTC）</label>
               <input type="text" id="notificationHours" placeholder="例如：08, 12, 20 或输入 * 表示全天"
                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-              <p class="mt-1 text-sm text-gray-500">可输入多个小时，使用逗号或空格分隔；留空则默认每天执行一次任务即可</p>
-            </div>
-            <div class="bg-indigo-50 border border-indigo-100 rounded-md p-3 text-sm text-indigo-700">
-              <p class="font-medium mb-1">提示</p>
-              <p>Cloudflare Workers Cron 以 UTC 计算，例如北京时间 08:00 需设置 Cron 为 <code>0 0 * * *</code> 并在此填入 08。</p>
-              <p class="mt-1">若 Cron 已设置为每小时执行，可用该字段限制实际发送提醒的小时段。</p>
             </div>
           </div>
           <div class="mb-6">
@@ -5710,23 +5756,6 @@ const configPage = `
                 <span class="ml-2 text-sm text-gray-700">Bark</span>
               </label>
             </div>
-            <div class="mt-2 flex flex-wrap gap-4">
-              <a href="https://www.notifyx.cn/" target="_blank" class="text-indigo-600 hover:text-indigo-800 text-sm">
-                <i class="fas fa-external-link-alt ml-1"></i> NotifyX官网
-              </a>
-              <a href="https://webhook.site" target="_blank" class="text-indigo-600 hover:text-indigo-800 text-sm">
-                <i class="fas fa-external-link-alt ml-1"></i> Webhook 调试工具
-              </a>
-              <a href="https://developer.work.weixin.qq.com/document/path/91770" target="_blank" class="text-indigo-600 hover:text-indigo-800 text-sm">
-                <i class="fas fa-external-link-alt ml-1"></i> 企业微信机器人文档
-              </a>
-              <a href="https://developers.cloudflare.com/workers/tutorials/send-emails-with-resend/" target="_blank" class="text-indigo-600 hover:text-indigo-800 text-sm">
-                <i class="fas fa-external-link-alt ml-1"></i> 获取 Resend API Key
-              </a>
-              <a href="https://apps.apple.com/cn/app/bark-customed-notifications/id1403753865" target="_blank" class="text-indigo-600 hover:text-indigo-800 text-sm">
-                <i class="fas fa-external-link-alt ml-1"></i> Bark iOS应用
-              </a>
-            </div>
           </div>
 
           <div class="mb-6">
@@ -5738,7 +5767,6 @@ const configPage = `
                 <i class="fas fa-magic mr-2"></i>生成令牌
               </button>
             </div>
-            <p class="mt-1 text-sm text-gray-500">调用 /api/notify/{token} 接口时需携带此令牌；留空表示禁用第三方 API 推送。</p>
           </div>
           
           <div id="telegramConfig" class="config-section">
@@ -5765,7 +5793,7 @@ const configPage = `
             <div class="mb-4">
               <label for="notifyxApiKey" class="block text-sm font-medium text-gray-700">API Key</label>
               <input type="text" id="notifyxApiKey" placeholder="从 NotifyX 平台获取的 API Key" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-              <p class="mt-1 text-sm text-gray-500">从 <a href="https://www.notifyx.cn/" target="_blank" class="text-indigo-600 hover:text-indigo-800">NotifyX平台</a> 获取的 API Key</p>
+              <p class="mt-1 text-sm text-gray-500">从 NotifyX 平台获取的 API Key</p>
             </div>
             <div class="flex justify-end">
               <button type="button" id="testNotifyXBtn" class="btn-secondary text-white px-4 py-2 rounded-md text-sm font-medium">
@@ -5848,9 +5876,9 @@ const configPage = `
             <h4 class="text-md font-medium text-gray-900 mb-3">邮件通知 配置</h4>
             <div class="grid grid-cols-1 gap-4 mb-4">
               <div>
-                <label for="resendApiKey" class="block text-sm font-medium text-gray-700">Resend API Key</label>
-                <input type="text" id="resendApiKey" placeholder="re_xxxxxxxxxx" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                <p class="mt-1 text-sm text-gray-500">从 <a href="https://resend.com/api-keys" target="_blank" class="text-indigo-600 hover:text-indigo-800">Resend控制台</a> 获取的 API Key</p>
+              <label for="resendApiKey" class="block text-sm font-medium text-gray-700">Resend API Key</label>
+              <input type="text" id="resendApiKey" placeholder="re_xxxxxxxxxx" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <p class="mt-1 text-sm text-gray-500">从 Resend 控制台获取的 API Key</p>
               </div>
               <div>
                 <label for="emailFrom" class="block text-sm font-medium text-gray-700">发件人邮箱</label>
@@ -5886,7 +5914,7 @@ const configPage = `
               <div>
                 <label for="barkDeviceKey" class="block text-sm font-medium text-gray-700">设备Key</label>
                 <input type="text" id="barkDeviceKey" placeholder="从Bark应用获取的设备Key" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                <p class="mt-1 text-sm text-gray-500">从 <a href="https://apps.apple.com/cn/app/bark-customed-notifications/id1403753865" target="_blank" class="text-indigo-600 hover:text-indigo-800">Bark iOS 应用</a> 中获取的设备Key</p>
+                <p class="mt-1 text-sm text-gray-500">从 Bark iOS 应用中获取的设备Key</p>
               </div>
               <div>
                 <label for="barkIsArchive" class="block text-sm font-medium text-gray-700 mb-2">保存推送</label>
@@ -5912,11 +5940,9 @@ const configPage = `
         </div>
       </form>
       <nav class="mobile-bottom-nav" aria-label="手机底部导航">
-        <a href="/admin" class="mobile-nav-item"><i class="fas fa-house" aria-hidden="true"></i><span>首页</span></a>
-        <a href="/admin#subscriptionListPanel" class="mobile-nav-item"><i class="fas fa-list" aria-hidden="true"></i><span>订阅</span></a>
+        <a href="/admin" class="mobile-nav-item"><i class="fas fa-list" aria-hidden="true"></i><span>订阅</span></a>
         <a href="/admin" class="mobile-nav-add" aria-label="返回订阅页添加订阅"><i class="fas fa-plus" aria-hidden="true"></i><span>添加</span></a>
-        <a href="#notifySection" class="mobile-nav-item"><i class="fas fa-bell" aria-hidden="true"></i><span>提醒</span></a>
-        <a href="/admin/config" class="mobile-nav-item is-active"><i class="fas fa-user" aria-hidden="true"></i><span>我的</span></a>
+        <a href="/admin/config" class="mobile-nav-item is-active"><i class="fas fa-sliders" aria-hidden="true"></i><span>设置</span></a>
       </nav>
     </div>
   </main>
