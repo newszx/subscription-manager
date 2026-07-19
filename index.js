@@ -1373,143 +1373,12 @@ nav.bg-white {
   backdrop-filter: blur(16px);
 }
 
-.install-entry {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 16px;
-  padding: 16px;
-  border: 1px solid #dbeafe;
-  border-radius: 16px;
-  background: #f8fbff;
-}
-
-.install-entry-main {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 14px;
-  flex: 1;
-}
-
-.install-entry-icon {
-  display: inline-grid;
-  width: 44px;
-  height: 44px;
-  place-items: center;
-  border-radius: 14px;
-  background: var(--color-primary);
-  color: #fff;
-}
-
-.install-entry-copy {
-  flex: 1;
-}
-
-.install-entry-copy b {
-  display: block;
-  font-size: 0.92rem;
-}
-
-.install-entry-copy span {
-  display: block;
-  margin-top: 3px;
-  color: var(--color-muted);
-  font-size: 0.78rem;
-}
-
-.install-entry-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 0 0 auto;
-}
-
 .config-section.inactive {
   display: none;
 }
 
 .config-section.active {
   opacity: 1;
-}
-
-.install-page {
-  width: min(430px, calc(100% - 32px));
-  margin: 0 auto;
-  padding: 22px 0 calc(94px + env(safe-area-inset-bottom));
-}
-
-.install-hero {
-  position: relative;
-  overflow: hidden;
-  padding: 26px;
-  border-radius: 24px;
-  color: #fff;
-  background: linear-gradient(145deg, #0f2f74, #2563eb);
-  text-align: center;
-}
-
-.install-hero .brand-mark {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 16px;
-  border-radius: 22px;
-  box-shadow: none;
-}
-
-.install-hero h1 {
-  margin: 0;
-  font-size: 1.45rem;
-  font-weight: 820;
-}
-
-.install-hero p {
-  margin: 10px 0 20px;
-  color: rgba(255,255,255,0.82);
-  font-size: 0.86rem;
-  line-height: 1.7;
-}
-
-.install-steps {
-  display: grid;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.install-step {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  padding: 14px;
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  background: #fff;
-}
-
-.install-step span {
-  display: inline-grid;
-  width: 28px;
-  height: 28px;
-  flex: 0 0 auto;
-  place-items: center;
-  border-radius: 9px;
-  background: #eff6ff;
-  color: var(--color-primary);
-  font-size: 0.78rem;
-  font-weight: 800;
-}
-
-.install-step b {
-  display: block;
-  font-size: 0.9rem;
-}
-
-.install-step p {
-  margin: 3px 0 0;
-  color: var(--color-muted);
-  font-size: 0.78rem;
-  line-height: 1.6;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1826,33 +1695,6 @@ nav.bg-white {
     padding: 16px;
   }
 
-  .install-entry {
-    flex-direction: column;
-    align-items: stretch;
-    border-radius: 18px;
-  }
-
-  .install-entry-main {
-    width: 100%;
-    align-items: flex-start;
-  }
-
-  .install-entry-actions {
-    width: 100%;
-    justify-content: stretch;
-  }
-
-  .install-entry-actions > * {
-    flex: 1;
-  }
-
-  .install-entry .btn-primary {
-    width: 100%;
-    min-width: 0;
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-  }
-
   .settings-save-bar {
     left: 0;
     right: 0;
@@ -1989,8 +1831,7 @@ nav.bg-white {
 }
 
 .brand-mark,
-.login-logo,
-.install-entry-icon {
+.login-logo {
   width: 40px;
   height: 40px;
   border-radius: 10px;
@@ -2077,7 +1918,6 @@ nav.bg-white {
 .metric-card,
 .content-panel,
 .settings-card,
-.install-step,
 .mobile-subscription-card,
 .mobile-empty-state {
   border: 1px solid var(--color-border);
@@ -2200,8 +2040,7 @@ nav.bg-white {
 .btn-info,
 #calculateExpiryBtn,
 #cancelBtn,
-button[type="submit"],
-.install-entry a {
+button[type="submit"] {
   min-height: 42px;
   border-radius: var(--radius-sm) !important;
   background-image: none !important;
@@ -2337,50 +2176,6 @@ textarea:focus {
   bottom: 14px;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-}
-
-.install-entry {
-  margin-bottom: 14px;
-  border-color: var(--color-border);
-  background: #ffffff;
-}
-
-.install-page {
-  width: min(560px, calc(100% - 40px));
-  padding: 28px 0 56px;
-}
-
-.install-hero {
-  padding: 22px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: #ffffff;
-  color: var(--color-foreground);
-  text-align: left;
-}
-
-.install-hero .brand-mark {
-  width: 44px;
-  height: 44px;
-  margin: 0 0 14px;
-  border-radius: 10px;
-}
-
-.install-hero h1 {
-  font-size: 1.35rem;
-}
-
-.install-hero p {
-  color: var(--color-muted);
-}
-
-.install-hero .bg-white.bg-opacity-10 {
-  background: #edf4ff !important;
-  color: var(--color-primary);
-}
-
-.install-steps {
-  gap: 10px;
 }
 
 .modal-container {
@@ -2587,20 +2382,6 @@ textarea:focus {
     bottom: calc(78px + env(safe-area-inset-bottom));
   }
 
-  .install-entry {
-    padding: 14px;
-  }
-
-  .install-page {
-    width: min(100% - 28px, 560px);
-    padding-top: 18px;
-    padding-bottom: calc(92px + env(safe-area-inset-bottom));
-  }
-
-  .install-hero {
-    padding: 18px;
-  }
-
   .login-container {
     padding: 14px;
   }
@@ -2665,10 +2446,6 @@ textarea:focus {
   border-radius: var(--radius-md);
 }
 
-.settings-panel > .install-entry {
-  display: none;
-}
-
 .settings-card {
   margin-bottom: 12px;
 }
@@ -2704,61 +2481,10 @@ const pwaHeadTags = `
   <link rel="apple-touch-icon" href="/assets/icon-192.svg">
 `;
 
-const APP_CSS_URL = '/assets/app.css?v=20260720-simple3';
+const APP_CSS_URL = '/assets/app.css?v=20260720-simple4';
 
 const pwaRuntimeScript = `
   <script>
-    window.deferredInstallPrompt = null;
-
-    function isStandaloneMode() {
-      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-    }
-
-    function syncInstallUi() {
-      const standalone = isStandaloneMode();
-      const canInstall = !!window.deferredInstallPrompt;
-
-      document.querySelectorAll('[data-install-status]').forEach(node => {
-        if (standalone) {
-          node.textContent = '已安装';
-        } else if (canInstall) {
-          node.textContent = '可安装';
-        } else {
-          node.textContent = '等待浏览器支持';
-        }
-      });
-
-      document.querySelectorAll('[data-install-app]').forEach(button => {
-        button.hidden = standalone ? true : !canInstall;
-        button.disabled = standalone ? true : false;
-      });
-    }
-
-    window.addEventListener('beforeinstallprompt', event => {
-      event.preventDefault();
-      window.deferredInstallPrompt = event;
-      syncInstallUi();
-    });
-
-    async function triggerAppInstall() {
-      if (isStandaloneMode()) {
-        alert('别忘订阅已经以应用模式打开。');
-        return;
-      }
-      if (!window.deferredInstallPrompt) {
-        window.location.href = '/admin/install';
-        return;
-      }
-      const promptEvent = window.deferredInstallPrompt;
-      window.deferredInstallPrompt = null;
-      promptEvent.prompt();
-      await promptEvent.userChoice.catch(() => null);
-    }
-
-    window.addEventListener('appinstalled', () => {
-      syncInstallUi();
-    });
-
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch(error => {
@@ -2766,16 +2492,6 @@ const pwaRuntimeScript = `
         });
       });
     }
-
-    window.addEventListener('DOMContentLoaded', syncInstallUi);
-
-    document.addEventListener('click', event => {
-      const installButton = event.target.closest('[data-install-app]');
-      if (installButton) {
-        event.preventDefault();
-        triggerAppInstall();
-      }
-    });
   </script>
 `;
 
@@ -2814,7 +2530,7 @@ const appManifest = JSON.stringify({
 }, null, 2);
 
 const serviceWorkerScript = `
-const CACHE_NAME = 'buwang-subscription-v5';
+const CACHE_NAME = 'buwang-subscription-v6';
 const STATIC_ASSETS = [
   '/',
   '/offline',
@@ -2884,94 +2600,6 @@ const offlinePage = `<!DOCTYPE html>
     <p>别忘订阅需要网络连接才能读取最新订阅和配置。你可以稍后重试，离线缓存不会展示可能过期的数据。</p>
     <a class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium" href="/admin">重新打开</a>
   </main>
-  ${pwaRuntimeScript}
-</body>
-</html>`;
-
-const installPage = `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>安装应用 - 别忘订阅</title>
-  ${pwaHeadTags}
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <link href="${APP_CSS_URL}" rel="stylesheet">
-</head>
-<body class="app-shell min-h-screen">
-  <nav class="app-nav">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center gap-3">
-          <span class="brand-mark"><i class="fas fa-calendar-check" aria-hidden="true"></i></span>
-          <span class="brand-title">
-            <strong>别忘订阅</strong>
-            <span>续费提醒与订阅管理</span>
-          </span>
-        </div>
-        <div class="nav-actions">
-          <a href="/admin" class="nav-link"><i class="fas fa-table-list" aria-hidden="true"></i>订阅</a>
-          <a href="/admin/config" class="nav-link"><i class="fas fa-sliders" aria-hidden="true"></i>设置</a>
-          <a href="/admin/install" class="nav-link is-active"><i class="fas fa-download" aria-hidden="true"></i>安装应用</a>
-          <a href="/api/logout" class="nav-link"><i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i>退出登录</a>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <main class="install-page">
-    <section class="install-hero" aria-labelledby="installTitle">
-      <div class="brand-mark" aria-hidden="true"><i class="fas fa-calendar-check"></i></div>
-      <h1 id="installTitle">安装别忘订阅</h1>
-      <p>把订阅管理放进主屏幕或桌面，打开更快，通知更像原生应用。</p>
-      <div class="flex items-center justify-center gap-2 text-xs">
-        <span class="px-3 py-1 rounded-full bg-white bg-opacity-10">状态</span>
-        <span data-install-status>等待浏览器支持</span>
-      </div>
-      <div class="mt-5 flex flex-col gap-3">
-        <button type="button" class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium" data-install-app hidden>
-          <i class="fas fa-download mr-2" aria-hidden="true"></i>安装应用
-        </button>
-        <a href="/admin" class="btn-secondary text-white px-4 py-2 rounded-md text-sm font-medium">
-          <i class="fas fa-arrow-left mr-2" aria-hidden="true"></i>返回后台
-        </a>
-      </div>
-    </section>
-
-    <section class="install-steps" aria-label="安装步骤">
-      <article class="install-step">
-        <span>1</span>
-        <div>
-          <b>Android Chrome</b>
-          <p>当浏览器提示安装时，点“安装应用”即可。</p>
-        </div>
-      </article>
-      <article class="install-step">
-        <span>2</span>
-        <div>
-          <b>iPhone / iPad Safari</b>
-          <p>点浏览器分享按钮，选择“添加到主屏幕”。</p>
-        </div>
-      </article>
-      <article class="install-step">
-        <span>3</span>
-        <div>
-          <b>确认名称</b>
-          <p>保存后应用名称应显示为“别忘订阅”。</p>
-        </div>
-      </article>
-    </section>
-
-    <section class="mt-4 install-step">
-      <span><i class="fas fa-shield-halved" aria-hidden="true"></i></span>
-      <div>
-        <b>安装后会保留登录态</b>
-        <p>应用入口仍然走 Cloudflare Workers，不会把密钥或订阅数据缓存到离线里。</p>
-      </div>
-    </section>
-  </main>
-
   ${pwaRuntimeScript}
 </body>
 </html>`;
@@ -3431,9 +3059,6 @@ const adminPage = `
           </a>
           <a href="/admin/config" class="nav-link">
             <i class="fas fa-sliders" aria-hidden="true"></i>设置
-          </a>
-          <a href="/admin/install" class="nav-link">
-            <i class="fas fa-download" aria-hidden="true"></i>安装应用
           </a>
           <a href="/api/logout" class="nav-link">
             <i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i>退出登录
@@ -5965,9 +5590,6 @@ const configPage = `
           <a href="/admin/config" class="nav-link is-active">
             <i class="fas fa-sliders" aria-hidden="true"></i>设置
           </a>
-          <a href="/admin/install" class="nav-link">
-            <i class="fas fa-download" aria-hidden="true"></i>安装应用
-          </a>
           <a href="/api/logout" class="nav-link">
             <i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i>退出登录
           </a>
@@ -6876,12 +6498,6 @@ const admin = {
 
       if (pathname === '/admin/config') {
         return new Response(configPage, {
-          headers: { 'Content-Type': 'text/html; charset=utf-8' }
-        });
-      }
-
-      if (pathname === '/admin/install') {
-        return new Response(installPage, {
           headers: { 'Content-Type': 'text/html; charset=utf-8' }
         });
       }
