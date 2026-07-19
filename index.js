@@ -3018,28 +3018,6 @@ const loginPage = `
 </head>
 <body class="login-container flex items-center justify-center">
   <main class="login-shell">
-    <section class="login-panel" aria-label="SubsTracker 概览">
-      <div>
-        <div class="hero-eyebrow">BUWANG SUBSCRIPTION</div>
-        <h1>别忘订阅，替你盯住每一次续费</h1>
-        <p>轻量部署在 Cloudflare Workers，集中管理周期、农历日期、提醒窗口和多渠道推送。</p>
-      </div>
-      <div class="login-kpis" aria-label="核心能力">
-        <div class="login-kpi">
-          <strong>KV</strong>
-          <span>低成本存储</span>
-        </div>
-        <div class="login-kpi">
-          <strong>UTC</strong>
-          <span>Cron 定时</span>
-        </div>
-        <div class="login-kpi">
-          <strong>6+</strong>
-          <span>通知渠道</span>
-        </div>
-      </div>
-    </section>
-
     <section class="login-box p-8 w-full" aria-label="登录表单">
       <div class="mb-8">
         <div class="login-logo">
@@ -3466,66 +3444,10 @@ const adminPage = `
   </nav>
   
   <main class="page-shell">
-    <section class="mobile-home-hero" aria-label="手机概览">
-      <div class="mobile-greeting">
-        <div>
-          <h1>别忘订阅</h1>
-          <p>今天先看即将到期的项目</p>
-        </div>
-        <a href="/admin/config" class="mobile-avatar" aria-label="进入设置">我</a>
-      </div>
-      <div class="mobile-summary-card">
-        <span>本月订阅概览</span>
-        <strong id="mobileMetricTotal">0</strong>
-        <p id="mobileHealthText">正在同步订阅状态</p>
-        <div class="mobile-summary-grid">
-          <div><b id="mobileMetricActive">0</b><small>启用中</small></div>
-          <div><b id="mobileMetricSoon">0</b><small>即将到期</small></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="dashboard-hero">
-      <div>
-        <div class="hero-eyebrow">订阅管理</div>
-        <h1>集中查看续费日期、费用和提醒状态。</h1>
-        <p>轻量部署在 Cloudflare Workers，保留原有提醒、Cron 和多渠道通知能力。</p>
-      </div>
-      <div class="hero-badge">
-        <i class="fas fa-bolt" aria-hidden="true"></i>
-        <span id="dashboardHealthText">等待数据同步</span>
-      </div>
-    </section>
-
-    <section class="metric-grid" aria-label="订阅概览">
-      <article class="metric-card">
-        <div class="metric-label"><i class="fas fa-layer-group" aria-hidden="true"></i>全部订阅</div>
-        <div id="metricTotal" class="metric-value">0</div>
-        <div class="metric-note">已记录项目</div>
-      </article>
-      <article class="metric-card">
-        <div class="metric-label"><i class="fas fa-circle-check" aria-hidden="true"></i>启用中</div>
-        <div id="metricActive" class="metric-value">0</div>
-        <div class="metric-note">参与提醒计算</div>
-        <div class="metric-bar"><span id="metricActiveBar"></span></div>
-      </article>
-      <article class="metric-card">
-        <div class="metric-label"><i class="fas fa-bell" aria-hidden="true"></i>即将到期</div>
-        <div id="metricSoon" class="metric-value">0</div>
-        <div class="metric-note">在提醒窗口内</div>
-      </article>
-      <article class="metric-card">
-        <div class="metric-label"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i>已过期</div>
-        <div id="metricExpired" class="metric-value">0</div>
-        <div class="metric-note">需要处理</div>
-      </article>
-    </section>
-
     <section class="content-panel" id="subscriptionListPanel">
       <div class="section-header">
         <div>
           <h2>订阅列表</h2>
-          <p>默认按最近到期排序。</p>
         </div>
         <button id="addSubscriptionBtn" class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium">
           <i class="fas fa-plus mr-2" aria-hidden="true"></i>添加订阅
@@ -3549,10 +3471,6 @@ const adminPage = `
       </div>
 
       <div id="mobileCategoryChips" class="mobile-category-chips" aria-label="分类筛选"></div>
-
-      <div class="table-meta">
-        <span id="tableResultCount">等待加载订阅数据</span>
-      </div>
       
       <div class="table-container overflow-hidden">
         <div class="overflow-x-auto">
@@ -4384,18 +4302,23 @@ const lunarBiz = {
 
     function populateCategoryFilter(subscriptions) {
       const select = document.getElementById('categoryFilter');
+      const chipContainer = document.getElementById('mobileCategoryChips');
+      const toolbarActions = document.querySelector('.toolbar-actions');
+      const toolbarRow = document.querySelector('.toolbar-row');
       if (!select) {
         return;
       }
 
       const previousValue = select.value;
       const categories = new Set();
+      const hasSubscriptions = Array.isArray(subscriptions) && subscriptions.length > 0;
 
       (subscriptions || []).forEach(subscription => {
         normalizeCategoryTokens(subscription.category).forEach(token => categories.add(token));
       });
 
       const sorted = Array.from(categories).sort((a, b) => a.localeCompare(b, 'zh-CN'));
+      const hasCategoryOptions = sorted.length > 0;
       select.innerHTML = '';
 
       const defaultOption = document.createElement('option');
@@ -4416,26 +4339,40 @@ const lunarBiz = {
         select.value = '';
       }
 
-      const chipContainer = document.getElementById('mobileCategoryChips');
+      select.style.display = hasCategoryOptions ? '' : 'none';
+      if (toolbarActions) {
+        toolbarActions.style.display = hasSubscriptions ? '' : 'none';
+      }
+      if (toolbarRow) {
+        toolbarRow.style.gridTemplateColumns = hasCategoryOptions
+          ? 'minmax(220px, 1fr) minmax(150px, 190px) auto'
+          : (hasSubscriptions ? 'minmax(220px, 1fr) auto' : '1fr');
+      }
       if (chipContainer) {
-        const total = Array.isArray(subscriptions) ? subscriptions.length : 0;
-        chipContainer.innerHTML =
-          '<button type="button" class="mobile-category-chip" data-category="">全部 ' + total + '</button>' +
-          sorted.map(cat => {
-            const count = (subscriptions || []).filter(subscription =>
-              normalizeCategoryTokens(subscription.category).some(token => token.toLowerCase() === cat.toLowerCase())
-            ).length;
-            return '<button type="button" class="mobile-category-chip" data-category="' + escapeAttribute(cat) + '">' +
-              escapeHtml(cat) + ' ' + count +
-            '</button>';
-          }).join('');
+        if (sorted.length === 0) {
+          chipContainer.innerHTML = '';
+          chipContainer.style.display = 'none';
+        } else {
+          const total = Array.isArray(subscriptions) ? subscriptions.length : 0;
+          chipContainer.innerHTML =
+            '<button type="button" class="mobile-category-chip" data-category="">全部 ' + total + '</button>' +
+            sorted.map(cat => {
+              const count = (subscriptions || []).filter(subscription =>
+                normalizeCategoryTokens(subscription.category).some(token => token.toLowerCase() === cat.toLowerCase())
+              ).length;
+              return '<button type="button" class="mobile-category-chip" data-category="' + escapeAttribute(cat) + '">' +
+                escapeHtml(cat) + ' ' + count +
+              '</button>';
+            }).join('');
 
-        chipContainer.querySelectorAll('.mobile-category-chip').forEach(chip => {
-          chip.addEventListener('click', () => {
-            select.value = chip.dataset.category || '';
-            renderSubscriptionTable();
+          chipContainer.style.display = '';
+          chipContainer.querySelectorAll('.mobile-category-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+              select.value = chip.dataset.category || '';
+              renderSubscriptionTable();
+            });
           });
-        });
+        }
       }
     }
 
@@ -4501,69 +4438,6 @@ const lunarBiz = {
       );
 
       return { daysDiff, diffHours, isExpired, isSoon };
-    }
-
-    function setText(id, value) {
-      const element = document.getElementById(id);
-      if (element) {
-        element.textContent = value;
-      }
-    }
-
-    function updateDashboardMetrics() {
-      const list = Array.isArray(subscriptionsCache) ? subscriptionsCache : [];
-      const now = new Date();
-      const total = list.length;
-      const active = list.filter(subscription => subscription.isActive !== false).length;
-      let soon = 0;
-      let expired = 0;
-
-      list.forEach(subscription => {
-        const timing = getSubscriptionTiming(subscription, now);
-        if (subscription.isActive !== false && timing.isExpired) {
-          expired += 1;
-        } else if (timing.isSoon) {
-          soon += 1;
-        }
-      });
-
-      setText('metricTotal', total);
-      setText('metricActive', active);
-      setText('metricSoon', soon);
-      setText('metricExpired', expired);
-      setText('mobileMetricTotal', total);
-      setText('mobileMetricActive', active);
-      setText('mobileMetricSoon', soon);
-
-      const activeBar = document.getElementById('metricActiveBar');
-      if (activeBar) {
-        activeBar.style.width = total ? Math.round((active / total) * 100) + '%' : '0%';
-      }
-
-      const healthText = document.getElementById('dashboardHealthText');
-      const mobileHealthText = document.getElementById('mobileHealthText');
-      let healthMessage = '暂无订阅数据';
-      if (healthText) {
-        if (expired > 0) {
-          healthMessage = expired + ' 项过期待处理';
-        } else if (soon > 0) {
-          healthMessage = soon + ' 项即将到期';
-        } else if (total > 0) {
-          healthMessage = '运行状态正常';
-        }
-        healthText.textContent = healthMessage;
-      }
-      if (mobileHealthText) {
-        mobileHealthText.textContent = healthMessage;
-      }
-    }
-
-    function updateTableResultCount(filteredCount, totalCount) {
-      const element = document.getElementById('tableResultCount');
-      if (!element) {
-        return;
-      }
-      element.textContent = '显示 ' + filteredCount + ' / ' + totalCount + ' 项订阅';
     }
 
     function attachHoverListeners() {
@@ -4679,9 +4553,6 @@ const lunarBiz = {
           return haystack.includes(keyword);
         });
       }
-
-      updateDashboardMetrics();
-      updateTableResultCount(filtered.length, Array.isArray(subscriptionsCache) ? subscriptionsCache.length : 0);
 
       if (filtered.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" class="empty-state-cell text-center text-gray-500"><i class="fas fa-magnifying-glass mr-2"></i>没有符合条件的订阅</td></tr>';
@@ -6107,36 +5978,11 @@ const configPage = `
   
   <main class="page-shell">
     <div class="settings-layout">
-      <aside class="settings-sidebar" aria-label="设置目录">
-        <a href="#accountSection" class="is-active"><i class="fas fa-user" aria-hidden="true"></i>账户</a>
-        <a href="#displaySection"><i class="fas fa-eye" aria-hidden="true"></i>显示</a>
-        <a href="#timezoneSection"><i class="fas fa-globe" aria-hidden="true"></i>时区</a>
-        <a href="#notifySection"><i class="fas fa-bell" aria-hidden="true"></i>提醒</a>
-        <a href="#telegramConfig"><i class="fas fa-paper-plane" aria-hidden="true"></i>通知渠道</a>
-        <a href="#thirdPartyToken"><i class="fas fa-shield-halved" aria-hidden="true"></i>安全与 API</a>
-      </aside>
       <div class="settings-panel">
         <div class="section-header">
           <div>
             <h2>系统配置</h2>
             <p class="settings-intro">账户、时区和通知渠道统一管理。</p>
-          </div>
-        </div>
-        <div class="install-entry">
-          <div class="install-entry-main">
-            <div class="install-entry-icon"><i class="fas fa-download" aria-hidden="true"></i></div>
-            <div class="install-entry-copy">
-              <b>安装到手机桌面</b>
-              <span>在支持的浏览器中将别忘订阅保存成独立应用。</span>
-            </div>
-          </div>
-          <div class="install-entry-actions">
-            <button type="button" class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium" data-install-app hidden>
-              <i class="fas fa-download mr-2" aria-hidden="true"></i>安装
-            </button>
-            <a href="/admin/install" class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium">
-              <i class="fas fa-circle-info mr-2" aria-hidden="true"></i>查看
-            </a>
           </div>
         </div>
 
