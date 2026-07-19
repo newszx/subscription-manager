@@ -1938,6 +1938,759 @@ nav.bg-white {
     box-shadow: 0 12px 24px rgba(37, 99, 235, 0.32);
   }
 }
+
+/* Simple UI pass: calm surfaces, fewer visual effects, consistent spacing. */
+:root {
+  --color-primary: #2563eb;
+  --color-primary-strong: #1d4ed8;
+  --color-accent: #16a34a;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+  --color-surface: #ffffff;
+  --color-surface-soft: #f8fafc;
+  --color-background: #f4f7fb;
+  --color-foreground: #10203f;
+  --color-muted: #6b7890;
+  --color-border: #dde6f2;
+  --shadow-sm: 0 1px 2px rgba(16, 32, 63, 0.04);
+  --shadow-md: 0 10px 28px rgba(16, 32, 63, 0.06);
+  --shadow-lg: 0 18px 46px rgba(16, 32, 63, 0.14);
+  --radius-sm: 8px;
+  --radius-md: 8px;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--color-background) !important;
+}
+
+a,
+button {
+  cursor: pointer;
+}
+
+.app-nav,
+nav.bg-white {
+  background: #ffffff !important;
+  border-bottom: 1px solid var(--color-border);
+  backdrop-filter: none;
+}
+
+.app-nav .h-16 {
+  min-height: 64px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.brand-mark,
+.login-logo,
+.install-entry-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--color-primary);
+  box-shadow: none;
+}
+
+.brand-title strong {
+  font-size: 1rem;
+}
+
+.brand-title span {
+  color: var(--color-muted);
+}
+
+#systemTimeDisplay {
+  display: none !important;
+}
+
+.nav-actions {
+  gap: 6px;
+}
+
+.nav-link {
+  min-height: 40px;
+  border-radius: var(--radius-sm);
+  color: #334155 !important;
+  font-weight: 650;
+}
+
+.nav-link:hover,
+.nav-link.is-active {
+  background: #edf4ff;
+  border-color: #d6e5ff !important;
+  color: var(--color-primary) !important;
+}
+
+.page-shell {
+  width: min(1180px, calc(100% - 40px));
+  padding: 30px 0 48px;
+}
+
+.dashboard-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-end;
+  margin-bottom: 18px;
+  padding: 0;
+}
+
+.dashboard-hero h1 {
+  max-width: 720px;
+  font-size: clamp(1.6rem, 2.1vw, 2rem);
+  line-height: 1.25;
+  font-weight: 780;
+}
+
+.dashboard-hero p,
+.section-header p,
+.settings-intro {
+  color: var(--color-muted);
+}
+
+.hero-eyebrow {
+  margin-bottom: 6px;
+  color: var(--color-muted);
+  text-transform: none;
+}
+
+.hero-badge {
+  min-height: 36px;
+  border-color: var(--color-border);
+  background: #ffffff;
+  color: var(--color-primary);
+}
+
+.metric-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.metric-card,
+.content-panel,
+.settings-card,
+.install-step,
+.mobile-subscription-card,
+.mobile-empty-state {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.metric-card {
+  min-height: 104px;
+  padding: 16px;
+}
+
+.metric-label {
+  color: var(--color-muted);
+}
+
+.metric-label i {
+  width: auto;
+  height: auto;
+  background: transparent;
+  color: var(--color-primary);
+}
+
+.metric-value {
+  margin-top: 10px;
+  font-size: 1.75rem;
+}
+
+.metric-note {
+  color: var(--color-muted);
+}
+
+.metric-bar {
+  height: 5px;
+  background: #e8edf5;
+}
+
+.metric-bar span {
+  background: var(--color-primary);
+}
+
+.content-panel {
+  overflow: hidden;
+}
+
+.section-header {
+  padding: 16px 18px;
+  background: #ffffff;
+}
+
+.section-header h2,
+.settings-panel h2 {
+  font-size: 1.05rem;
+}
+
+.toolbar-row {
+  grid-template-columns: minmax(220px, 1fr) minmax(150px, 190px) auto;
+  padding: 14px 18px;
+  background: #ffffff;
+}
+
+.table-meta {
+  padding: 9px 18px;
+  background: #fbfdff;
+}
+
+.responsive-table thead {
+  background: #f8fafc !important;
+}
+
+.responsive-table th {
+  color: #64748b !important;
+  font-weight: 700 !important;
+}
+
+.responsive-table td {
+  color: var(--color-foreground);
+}
+
+.responsive-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.service-avatar {
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.status-badge {
+  padding: 5px 9px;
+  font-size: 0.74rem;
+}
+
+.status-badge.is-good {
+  background: #edfdf4;
+  color: #087a49;
+}
+
+.status-badge.is-soon {
+  background: #fff7ed;
+  color: #b45309;
+}
+
+.status-badge.is-danger {
+  background: #fef2f2;
+  color: #b42318;
+}
+
+.status-badge.is-paused {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-warning,
+.btn-danger,
+.btn-info,
+#calculateExpiryBtn,
+#cancelBtn,
+button[type="submit"],
+.install-entry a {
+  min-height: 42px;
+  border-radius: var(--radius-sm) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.btn-primary,
+button[type="submit"].btn-primary {
+  background: var(--color-primary) !important;
+}
+
+.btn-primary:hover,
+button[type="submit"].btn-primary:hover {
+  background: var(--color-primary-strong) !important;
+}
+
+.btn-secondary {
+  background: #475569 !important;
+}
+
+.btn-success {
+  background: var(--color-accent) !important;
+}
+
+.btn-warning {
+  background: var(--color-warning) !important;
+}
+
+.btn-danger {
+  background: var(--color-danger) !important;
+}
+
+.btn-info {
+  background: #0ea5e9 !important;
+}
+
+.action-buttons-wrapper {
+  gap: 6px;
+}
+
+.action-buttons-wrapper button {
+  min-height: 34px;
+  border-radius: 7px !important;
+}
+
+input,
+select,
+textarea {
+  min-height: 44px;
+  border-color: var(--color-border) !important;
+  border-radius: var(--radius-sm) !important;
+  background: #ffffff;
+}
+
+textarea {
+  min-height: 96px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+.login-container {
+  min-height: 100dvh;
+  padding: 20px;
+  background: var(--color-background) !important;
+}
+
+.login-shell {
+  width: min(420px, 100%);
+  display: block;
+}
+
+.login-panel {
+  display: none;
+}
+
+.login-box {
+  border: 1px solid var(--color-border);
+  background: #ffffff !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.login-title {
+  margin-top: 16px;
+  font-size: 1.35rem;
+}
+
+.settings-layout {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+.settings-panel {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  width: min(920px, 100%);
+  margin: 0 auto;
+}
+
+.settings-panel .section-header {
+  margin-bottom: 14px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.settings-sidebar {
+  display: none;
+}
+
+.settings-sidebar a {
+  min-height: 40px;
+  border-radius: var(--radius-sm);
+}
+
+.settings-card {
+  padding: 16px 0 18px;
+  border: 0 !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.settings-save-bar {
+  bottom: 14px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.install-entry {
+  margin-bottom: 14px;
+  border-color: var(--color-border);
+  background: #ffffff;
+}
+
+.install-page {
+  width: min(560px, calc(100% - 40px));
+  padding: 28px 0 56px;
+}
+
+.install-hero {
+  padding: 22px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  color: var(--color-foreground);
+  text-align: left;
+}
+
+.install-hero .brand-mark {
+  width: 44px;
+  height: 44px;
+  margin: 0 0 14px;
+  border-radius: 10px;
+}
+
+.install-hero h1 {
+  font-size: 1.35rem;
+}
+
+.install-hero p {
+  color: var(--color-muted);
+}
+
+.install-hero .bg-white.bg-opacity-10 {
+  background: #edf4ff !important;
+  color: var(--color-primary);
+}
+
+.install-steps {
+  gap: 10px;
+}
+
+.modal-container {
+  background: rgba(15, 23, 42, 0.36) !important;
+  backdrop-filter: none;
+}
+
+#subscriptionModal > div {
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+#subscriptionModal .bg-gray-50 {
+  background: #ffffff !important;
+}
+
+.custom-date-picker {
+  max-width: calc(100vw - 24px);
+  min-width: min(380px, calc(100vw - 24px)) !important;
+}
+
+.custom-date-picker .calendar-day {
+  width: auto;
+  min-width: 0;
+  height: 48px;
+  border-radius: 7px;
+}
+
+.custom-date-picker .calendar-day:hover,
+.custom-date-picker .calendar-day.selected {
+  transform: none;
+}
+
+.toast {
+  box-shadow: var(--shadow-md) !important;
+}
+
+@media (max-width: 1024px) {
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .settings-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .settings-sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  body.app-shell {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+
+  .app-nav .h-16 {
+    min-height: 62px;
+  }
+
+  .brand-title span {
+    display: none;
+  }
+
+  .page-shell {
+    width: min(100% - 28px, 1180px);
+    padding-top: 18px;
+    padding-bottom: calc(92px + env(safe-area-inset-bottom));
+  }
+
+  .dashboard-hero {
+    display: none;
+  }
+
+  .mobile-home-hero {
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .mobile-greeting {
+    margin-bottom: 12px;
+  }
+
+  .mobile-greeting h1 {
+    font-size: 1.35rem;
+  }
+
+  .mobile-summary-card {
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: #ffffff;
+    color: var(--color-foreground);
+    box-shadow: none;
+  }
+
+  .mobile-summary-card::after {
+    display: none;
+  }
+
+  .mobile-summary-card span,
+  .mobile-summary-card p,
+  .mobile-summary-card small {
+    color: var(--color-muted);
+  }
+
+  .mobile-summary-card strong {
+    color: var(--color-primary);
+    font-size: 2rem;
+  }
+
+  .mobile-summary-grid {
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .mobile-summary-grid div {
+    padding: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-soft);
+  }
+
+  .mobile-summary-grid b {
+    color: var(--color-foreground);
+  }
+
+  .metric-grid {
+    display: none;
+  }
+
+  .metric-card {
+    min-height: 94px;
+    padding: 12px;
+  }
+
+  .metric-value {
+    font-size: 1.45rem;
+  }
+
+  .content-panel {
+    border: 0;
+    background: transparent;
+  }
+
+  .section-header {
+    padding: 0 0 12px;
+    background: transparent;
+  }
+
+  .toolbar-row {
+    padding: 0 0 10px;
+    border: 0;
+    background: transparent;
+  }
+
+  .search-control input {
+    background: #ffffff;
+  }
+
+  .mobile-category-chips {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    padding: 0 0 10px;
+  }
+
+  .mobile-category-chip {
+    flex: 0 1 auto;
+  }
+
+  .table-meta {
+    padding: 0 0 10px;
+    border: 0;
+    background: transparent;
+  }
+
+  .mobile-card-list {
+    gap: 10px;
+    padding: 0;
+  }
+
+  .mobile-card-main {
+    padding: 14px;
+  }
+
+  .mobile-card-meta {
+    padding: 12px 14px;
+  }
+
+  .mobile-card-actions {
+    padding: 0 14px 14px;
+  }
+
+  .mobile-card-actions button {
+    flex: 1 1 calc(50% - 4px);
+    min-height: 38px;
+  }
+
+  .settings-card {
+    padding: 16px;
+  }
+
+  .settings-save-bar {
+    bottom: calc(78px + env(safe-area-inset-bottom));
+  }
+
+  .install-entry {
+    padding: 14px;
+  }
+
+  .install-page {
+    width: min(100% - 28px, 560px);
+    padding-top: 18px;
+    padding-bottom: calc(92px + env(safe-area-inset-bottom));
+  }
+
+  .install-hero {
+    padding: 18px;
+  }
+
+  .login-container {
+    padding: 14px;
+  }
+
+  .login-box {
+    padding: 22px !important;
+  }
+
+  #subscriptionModal > div {
+    border-radius: 16px 16px 0 0 !important;
+  }
+
+  #subscriptionModal form {
+    padding: 18px !important;
+  }
+
+  .custom-date-picker {
+    padding: 12px !important;
+  }
+
+  .custom-date-picker .grid {
+    gap: 4px !important;
+  }
+
+  .custom-date-picker .calendar-day {
+    height: 44px;
+    font-size: 12px;
+  }
+
+  .custom-date-picker .calendar-day .lunar-text {
+    font-size: 10px;
+  }
+
+  .mobile-bottom-nav {
+    min-height: calc(68px + env(safe-area-inset-bottom));
+    padding: 7px 8px calc(7px + env(safe-area-inset-bottom));
+    box-shadow: 0 -8px 18px rgba(16, 32, 63, 0.06);
+    backdrop-filter: none;
+  }
+
+  .mobile-nav-add i {
+    width: 46px;
+    height: 46px;
+    margin-top: -22px;
+    border-radius: 14px;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.2);
+  }
+}
+
+/* More reduction: put the actual list/form first and remove dashboard decoration. */
+.dashboard-hero,
+.metric-grid,
+.mobile-home-hero {
+  display: none !important;
+}
+
+.page-shell {
+  padding-top: 22px;
+}
+
+.content-panel {
+  border-radius: var(--radius-md);
+}
+
+.settings-panel > .install-entry {
+  display: none;
+}
+
+.settings-card {
+  margin-bottom: 12px;
+}
+
+.settings-card h3 {
+  margin-bottom: 14px !important;
+  font-size: 1rem !important;
+}
+
+.settings-card:last-of-type {
+  border-bottom: 0 !important;
+}
+
+@media (max-width: 767px) {
+  .page-shell {
+    padding-top: 16px;
+  }
+
+  .content-panel {
+    border: 0;
+  }
+}
 `;
 
 const pwaHeadTags = `
@@ -1951,7 +2704,7 @@ const pwaHeadTags = `
   <link rel="apple-touch-icon" href="/assets/icon-192.svg">
 `;
 
-const APP_CSS_URL = '/assets/app.css?v=20260719';
+const APP_CSS_URL = '/assets/app.css?v=20260720-simple3';
 
 const pwaRuntimeScript = `
   <script>
@@ -2061,7 +2814,7 @@ const appManifest = JSON.stringify({
 }, null, 2);
 
 const serviceWorkerScript = `
-const CACHE_NAME = 'buwang-subscription-v2';
+const CACHE_NAME = 'buwang-subscription-v5';
 const STATIC_ASSETS = [
   '/',
   '/offline',
@@ -5693,7 +6446,7 @@ const configPage = `
       <nav class="mobile-bottom-nav" aria-label="手机底部导航">
         <a href="/admin" class="mobile-nav-item"><i class="fas fa-house" aria-hidden="true"></i><span>首页</span></a>
         <a href="/admin#subscriptionListPanel" class="mobile-nav-item"><i class="fas fa-list" aria-hidden="true"></i><span>订阅</span></a>
-        <button id="mobileAddSubscriptionBtnConfig" class="mobile-nav-add" type="button" aria-label="添加订阅"><i class="fas fa-plus" aria-hidden="true"></i><span>添加</span></button>
+        <a href="/admin" class="mobile-nav-add" aria-label="返回订阅页添加订阅"><i class="fas fa-plus" aria-hidden="true"></i><span>添加</span></a>
         <a href="#notifySection" class="mobile-nav-item"><i class="fas fa-bell" aria-hidden="true"></i><span>提醒</span></a>
         <a href="/admin/config" class="mobile-nav-item is-active"><i class="fas fa-user" aria-hidden="true"></i><span>我的</span></a>
       </nav>
